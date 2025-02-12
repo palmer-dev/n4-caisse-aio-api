@@ -10,7 +10,7 @@ trait ShopDependant
     //
     public function isInShop(User $user, Model $model): bool
     {
-        return (!$this->needShopScope( $user )) || $model->shop->id === $user->shop_id;
+        return (!$this->needShopScope( $user )) || ($model->shop_id ?? $model->shop->id) === $user->shop_id;
     }
 
     private function needShopScope(User $user): bool

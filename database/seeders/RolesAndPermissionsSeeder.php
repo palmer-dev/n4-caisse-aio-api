@@ -35,7 +35,10 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->command->getOutput()->progressAdvance();
 
         $role = Role::findOrcreate( RolesEnum::EMPLOYEE->value );
-        $role->syncPermissions( Permission::whereNotIn( "name", [...PermissionsEnum::features(), ...PermissionsEnum::managers()] )->get() );
+        $role->syncPermissions( Permission::whereIn( "name", PermissionsEnum::employees() )->get() );
+
+        $role = Role::findOrcreate( RolesEnum::CLIENT->value );
+        $role->syncPermissions( Permission::whereIn( "name", PermissionsEnum::clients() )->get() );
 
         $this->command->getOutput()->progressFinish();
     }

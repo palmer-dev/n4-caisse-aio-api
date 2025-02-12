@@ -14,27 +14,23 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->getOutput()->progressStart( 4 );
+        $roles = RolesEnum::cases();
 
-        $user = User::factory()->create( [
-            'shop_id'  => Shop::inRandomOrder()->first()->id,
-            'email'    => 'admin@test.com',
-            'password' => bcrypt( 'admin' ),
-        ] );
+        $this->command->getOutput()->progressStart( count( $roles ) );
 
-        $this->command->getOutput()->progressAdvance();
+        foreach ($roles as $role) {
+            $user = User::factory()->create( [
+                'shop_id'  => Shop::inRandomOrder()->first()->id,
+                'email'    => "$role->value@test.com",
+                'password' => bcrypt( $role->value ),
+            ] );
 
-        $user->assignRole( RolesEnum::ADMIN );
+            $this->command->getOutput()->progressAdvance();
 
-        $user = User::factory()->create( [
-            'shop_id'  => Shop::inRandomOrder()->first()->id,
-            'email'    => 'shop@test.com',
-            'password' => bcrypt( 'shop' ),
-        ] );
+            $user->assignRole( $role );
 
-        $this->command->getOutput()->progressAdvance();
-
-        $user->assignRole( RolesEnum::MANAGER );
+            $this->command->getOutput()->progressAdvance();
+        }
 
         $this->command->getOutput()->progressFinish();
     }

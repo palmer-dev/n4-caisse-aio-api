@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use App\Attributes\ClientPermission;
+use App\Attributes\EmployeePermission;
 use App\Attributes\FeaturePermission;
 use App\Attributes\ManagerPermission;
 
@@ -19,9 +21,9 @@ enum PermissionsEnum: string
     /**
      * Permissions for standards access
      */
-
     // PRODUCTS PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_PRODUCTS         = "view-products";
     #[ManagerPermission]
     case CREATE_PRODUCTS       = "create-products";
@@ -33,6 +35,7 @@ enum PermissionsEnum: string
 
     // CATEGORIES PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_CATEGORIES         = "view-categories";
     #[ManagerPermission]
     case CREATE_CATEGORIES       = "create-categories";
@@ -76,6 +79,7 @@ enum PermissionsEnum: string
 
     // PRODUCT ATTRIBUTES PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_PRODUCT_ATTRIBUTES         = "view-product-attributes";
     #[ManagerPermission]
     case CREATE_PRODUCT_ATTRIBUTES       = "create-product-attributes";
@@ -88,6 +92,7 @@ enum PermissionsEnum: string
 
     // SKUS PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_SKUS         = "view-skus";
     #[ManagerPermission]
     case CREATE_SKUS       = "create-skus";
@@ -100,6 +105,7 @@ enum PermissionsEnum: string
 
     // ATTRIBUTE SKUS PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_ATTRIBUTE_SKUS         = "view-attribute-skus";
     #[ManagerPermission]
     case CREATE_ATTRIBUTE_SKUS       = "create-attribute-skus";
@@ -112,6 +118,7 @@ enum PermissionsEnum: string
 
     // STOCK PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_STOCKS         = "view-stocks";
     case CREATE_STOCKS       = "create-stocks";
     #[ManagerPermission]
@@ -121,6 +128,7 @@ enum PermissionsEnum: string
 
     // STOCK MOVEMENT PERMISSIONS
     #[ManagerPermission]
+    #[EmployeePermission]
     case VIEW_STOCK_MOVEMENTS         = "view-stocks-movements";
     #[ManagerPermission]
     case CREATE_STOCK_MOVEMENTS       = "create-stocks-movements";
@@ -129,6 +137,18 @@ enum PermissionsEnum: string
     #[ManagerPermission]
     case DELETE_STOCK_MOVEMENTS       = "delete-stocks-movements";
     case FORCE_DELETE_STOCK_MOVEMENTS = "force-delete-stocks-movements";
+
+    // STOCK MOVEMENT PERMISSIONS
+    #[ManagerPermission]
+    #[EmployeePermission]
+    case VIEW_CLIENTS         = "view-clients";
+    #[ManagerPermission]
+    case CREATE_CLIENTS       = "create-clients";
+    #[ManagerPermission]
+    case EDIT_CLIENTS         = "edit-clients";
+    #[ManagerPermission]
+    case DELETE_CLIENTS       = "delete-clients";
+    case FORCE_DELETE_CLIENTS = "force-delete-clients";
 
     public static function features(): array
     {
@@ -144,7 +164,6 @@ enum PermissionsEnum: string
         return $features;
     }
 
-
     public static function managers(): array
     {
         $reflection = new \ReflectionEnum( self::class );
@@ -152,6 +171,34 @@ enum PermissionsEnum: string
 
         foreach ($reflection->getCases() as $case) {
             if (!empty( $case->getAttributes( ManagerPermission::class ) )) {
+                $features[] = $case->getValue();
+            }
+        }
+
+        return $features;
+    }
+
+    public static function employees(): array
+    {
+        $reflection = new \ReflectionEnum( self::class );
+        $features   = [];
+
+        foreach ($reflection->getCases() as $case) {
+            if (!empty( $case->getAttributes( EmployeePermission::class ) )) {
+                $features[] = $case->getValue();
+            }
+        }
+
+        return $features;
+    }
+
+    public static function clients(): array
+    {
+        $reflection = new \ReflectionEnum( self::class );
+        $features   = [];
+
+        foreach ($reflection->getCases() as $case) {
+            if (!empty( $case->getAttributes( ClientPermission::class ) )) {
                 $features[] = $case->getValue();
             }
         }

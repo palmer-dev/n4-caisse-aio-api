@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
+use Filament\Tables\Table;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Table::configureUsing( function (Table $table): void {
+            $table->deferLoading();
+        } );
     }
 }

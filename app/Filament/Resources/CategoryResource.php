@@ -4,7 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Models\Category;
-use Filament\Forms\Components\Placeholder;
+use CodeWithDennis\FilamentSelectTree\SelectTree;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -26,96 +30,118 @@ use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
-	protected static ?string $model = Category::class;
+    protected static ?string $model = Category::class;
 
-	protected static ?string $slug = 'categories';
+    protected static ?string $slug = 'categories';
 
-	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = "Boutique";
 
-	public static function form(Form $form): Form
-	{
-		return $form
-			->schema( [
-				TextInput::make( 'name' )
-					->required()
-					->reactive()
-					->afterStateUpdated( fn($state, callable $set) => $set( 'slug', Str::slug( $state ) ) ),
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
-				TextInput::make( 'slug' )
-					->disabled()
-					->required()
-					->unique( Category::class, 'slug', fn($record) => $record ),
+    public static function getNavigationLabel(): string
+    {
+        return __( 'nav.categories' );
+    }
 
-				TextInput::make( 'description' ),
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema( [
+                TextInput::make( 'name' )
+                    ->required()
+                    ->live( true )
+                    ->afterStateUpdated( fn($state, callable $set) => $set( 'slug', Str::slug( $state ) ) ),
 
-				TextInput::make( 'parent_id' )
-					->integer(),
+                FileUpload::make( 'image' )
+                    ->disk( 'public' )
+                    ->image()
+                    ->imageEditor(),
 
-				Placeholder::make( 'created_at' )
-					->label( 'Created Date' )
-					->content( fn(?Category $record): string => $record?->created_at?->diffForHumans() ?? '-' ),
+                TextInput::make( 'slug' )
+                    ->required()
+                    ->readonly()
+                    ->unique( Category::class, 'slug', fn($record) => $record ),
 
-				Placeholder::make( 'updated_at' )
-					->label( 'Last Modified Date' )
-					->content( fn(?Category $record): string => $record?->updated_at?->diffForHumans() ?? '-' ),
-			] );
-	}
+                SelectTree::make( 'parent_id' )
+                    ->relationship( 'parent', 'name', 'parent_id' )
+                    ->enableBranchNode()
+                    ->expandSelected(),
 
-	public static function table(Table $table): Table
-	{
-		return $table
-			->columns( [
-				TextColumn::make( 'name' )
-					->searchable()
-					->sortable(),
+                auth()->user()->isAdmin() ?
+                    Select::make( 'shop_id' )
+                        ->relationship( 'shop', 'name' )
+                        ->searchable()
+                        ->preload()
+                        ->required()
+                        ->default( auth()->user()->shop_id ) :
+                    Hidden::make( 'shop_id' )->default( auth()->user()->shop_id ),
 
-				TextColumn::make( 'slug' )
-					->searchable()
-					->sortable(),
+                RichEditor::make( 'description' )
+                    ->columnSpanFull(),
+            ] );
+    }
 
-				TextColumn::make( 'description' ),
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns( [
+                ImageColumn::make( 'image' )->width( 50 )->height( 50 ),
 
-				ImageColumn::make( 'image' ),
+                TextColumn::make( 'name' )
+                    ->searchable()
+                    ->sortable(),
 
-				TextColumn::make( 'parent_id' ),
-			] )
-			->filters( [
-				TrashedFilter::make(),
-			] )
-			->actions( [
-				EditAction::make(),
-				DeleteAction::make(),
-				RestoreAction::make(),
-				ForceDeleteAction::make(),
-			] )
-			->bulkActions( [
-				BulkActionGroup::make( [
-					DeleteBulkAction::make(),
-					RestoreBulkAction::make(),
-					ForceDeleteBulkAction::make(),
-				] ),
-			] );
-	}
+                TextColumn::make( 'slug' )
+                    ->searchable()
+                    ->sortable(),
 
-	public static function getPages(): array
-	{
-		return [
-			'index'  => Pages\ListCategories::route( '/' ),
-			'create' => Pages\CreateCategory::route( '/create' ),
-			'edit'   => Pages\EditCategory::route( '/{record}/edit' ),
-		];
-	}
+                TextColumn::make( 'description' )
+                    ->html()
+                    ->words( 5 ),
 
-	public static function getEloquentQuery(): Builder
-	{
-		return parent::getEloquentQuery()
-			->withoutGlobalScopes( [
-				SoftDeletingScope::class,
-			] );
-	}
+                TextColumn::make( 'parent.name' )
+                    ->placeholder( __( "No parent" ) ),
 
-	public static function getGloballySearchableAttributes(): array
-	{
-		return ['name', 'slug'];
-	}
+                TextColumn::make( 'shop.name' )
+                    ->visible( auth()->user()->isAdmin() ),
+            ] )
+            ->filters( [
+                TrashedFilter::make(),
+            ] )
+            ->actions( [
+                EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
+            ] )
+            ->bulkActions( [
+                BulkActionGroup::make( [
+                    DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                ] ),
+            ] );
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index'  => Pages\ListCategories::route( '/' ),
+            'create' => Pages\CreateCategory::route( '/create' ),
+            'edit'   => Pages\EditCategory::route( '/{record}/edit' ),
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes( [
+                SoftDeletingScope::class,
+            ] );
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'slug'];
+    }
 }

@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -57,6 +58,12 @@ class AdminPanelProvider extends PanelProvider
             ] )
             ->profile( EditProfile::class )
             ->databaseNotifications()
-            ->databaseNotificationsPolling( '5s' );
+//            ->databaseNotificationsPolling( '5s' )
+            ->navigationGroups( [
+                'Administration' => NavigationGroup::make( fn() => __( 'nav.admin' ) ),
+                'Boutique'       => NavigationGroup::make( fn() => __( 'nav.boutique' ) ),
+                'Settings'       => NavigationGroup::make( fn() => __( 'nav.setting' ) ),
+            ] )
+            ->viteTheme( 'resources/css/filament/admin/theme.css' );
     }
 }

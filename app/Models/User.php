@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\RolesEnum;
 use Database\Factories\UserFactory;
+use DateTimeInterface;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -26,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'firstname',
         'lastname',
         'email',
+        'phone',
         'password',
     ];
 
@@ -60,5 +64,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function shop(): BelongsTo
     {
         return $this->belongsTo( Shop::class );
+    }
+
+    public function saveToken(string $name, string $token, array $abilities = ['*'], ?DateTimeInterface $expiresAt = null): NewAccessToken
+    {
+        $token = $this->tokens()->create( [
+            'name'       => $name,
+            'token'      => hash( 'sha256', $token ),
+            'abilities'  => $abilities,
+            'expires_at' => $expiresAt,
+        ] );
+
+        return new NewAccessToken( $token, $token->getKey() . '|' . $token );
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole( RolesEnum::ADMIN );
     }
 }

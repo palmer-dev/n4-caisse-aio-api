@@ -13,7 +13,9 @@ return new class extends Migration {
     {
         //
         Schema::table( 'users', function (Blueprint $table) {
-            $table->foreignIdFor( Shop::class )->constrained( 'shops' );
+            $table->foreignIdFor( Shop::class )
+                ->after( 'password' )
+                ->constrained( 'shops' );
         } );
     }
 

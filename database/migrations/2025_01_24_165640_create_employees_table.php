@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string( 'code' )->unique();
             $table->string( 'email' )->nullable();
             $table->string( 'phone' )->nullable();
-            $table->foreignIdFor( Shop::class )->constrained( 'shops' );
+            $table->foreignIdFor( Shop::class )->constrained( 'shops' )->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         } );

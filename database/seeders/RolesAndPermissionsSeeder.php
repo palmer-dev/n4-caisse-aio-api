@@ -31,11 +31,11 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->command->getOutput()->progressAdvance();
 
         $role = Role::findOrcreate( RolesEnum::MANAGER->value );
-        $role->syncPermissions( Permission::all() );
+        $role->syncPermissions( Permission::whereIn( "name", PermissionsEnum::managers() )->get() );
         $this->command->getOutput()->progressAdvance();
 
         $role = Role::findOrcreate( RolesEnum::EMPLOYEE->value );
-        $role->syncPermissions( Permission::all() );
+        $role->syncPermissions( Permission::whereNotIn( "name", [...PermissionsEnum::features(), ...PermissionsEnum::managers()] )->get() );
 
         $this->command->getOutput()->progressFinish();
     }

@@ -29,7 +29,14 @@ class ShopResource extends Resource
 
     protected static ?string $slug = 'shops';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = "Administration";
+
+    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+
+    public static function getNavigationLabel(): string
+    {
+        return __( 'nav.shops' );
+    }
 
     public static function form(Form $form): Form
     {

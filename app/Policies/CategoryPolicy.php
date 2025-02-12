@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\enums\PermissionsEnum;
+use App\Enums\PermissionsEnum;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;

@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             ShopSeeder::class,
             UserSeeder::class,
             EmployeeSeeder::class,
+            CategorySeeder::class,
+            VatSeeder::class,
         ] );
     }
 }

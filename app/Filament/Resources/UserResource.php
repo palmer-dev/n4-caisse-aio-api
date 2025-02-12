@@ -14,7 +14,16 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $slug = "users";
+
+    protected static ?string $navigationGroup = "Administration";
+
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    public static function getNavigationLabel(): string
+    {
+        return __( 'nav.users' );
+    }
 
     public static function form(Form $form): Form
     {
@@ -41,9 +50,6 @@ class UserResource extends Resource
     {
         return $table
             ->columns( [
-                Tables\Columns\TextColumn::make( 'id' )
-                    ->label( 'ID' )
-                    ->searchable(),
                 Tables\Columns\TextColumn::make( 'firstname' )
                     ->searchable(),
                 Tables\Columns\TextColumn::make( 'lastname' )

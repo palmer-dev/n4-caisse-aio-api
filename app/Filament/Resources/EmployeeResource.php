@@ -3,7 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmployeeResource\Pages;
+use App\Helpers\UniqueEmployeeCodeHelper;
 use App\Models\Employee;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -29,7 +31,14 @@ class EmployeeResource extends Resource
 
     protected static ?string $slug = 'employees';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = "Boutique";
+
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function getNavigationLabel(): string
+    {
+        return __( 'nav.employees' );
+    }
 
     public static function form(Form $form): Form
     {
@@ -46,18 +55,26 @@ class EmployeeResource extends Resource
                 TextInput::make( 'phone' ),
 
                 TextInput::make( 'code' )
-                    ->required(),
-
-                Select::make( 'shop_id' )
-                    ->relationship( 'shop', 'name' )
-                    ->searchable()
                     ->required()
+                    ->default( fn(callable $get) => UniqueEmployeeCodeHelper::generate( $get( "shop" ) ?? auth()->user()->shop_id ) )
+                    ->disabledOn( "edit" ),
+
+                auth()->user()->isAdmin() ?
+                    Select::make( 'shop_id' )
+                        ->relationship( 'shop', 'name' )
+                        ->searchable()
+                        ->preload()
+                        ->required()
+                        ->default( auth()->user()->shop_id ) :
+                    Hidden::make( 'shop_id' )->default( auth()->user()->shop_id )
             ] );
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->heading( __( 'Employees' ) )
+            ->description( __( 'Manage your employees here.' ) )
             ->columns( [
                 TextColumn::make( 'firstname' ),
 
@@ -84,6 +101,8 @@ class EmployeeResource extends Resource
                 RestoreAction::make(),
                 ForceDeleteAction::make(),
             ] )
+            ->groups( auth()->user()->isAdmin() ? ["shop.name"] : [] )
+            ->defaultGroup( auth()->user()->isAdmin() ? "shop.name" : null )
             ->bulkActions( [
                 BulkActionGroup::make( [
                     DeleteBulkAction::make(),

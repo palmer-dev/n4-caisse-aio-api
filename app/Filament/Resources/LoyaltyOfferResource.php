@@ -2,14 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ClientResource\Pages;
+use App\Filament\Resources\LoyaltyOfferResource\Pages;
 use App\Helpers\AdminFieldsHelper;
-use App\Models\Client;
-use Carbon\Carbon;
+use App\Models\LoyaltyOffer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -24,36 +22,31 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ClientResource extends Resource
+class LoyaltyOfferResource extends Resource
 {
-    protected static ?string $model = Client::class;
+    protected static ?string $model = LoyaltyOffer::class;
 
-    protected static ?string $slug = 'clients';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $slug = 'loyalty-offers';
     protected static ?string $navigationGroup = "Boutique";
+
+    protected static ?string $navigationIcon = 'heroicon-o-gift-top';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema( [
-                TextInput::make( 'firstname' )
-                    ->maxLength( 50 )
-                    ->required(),
+                TextInput::make( 'points' )
+                    ->required()
+                    ->integer(),
 
-                TextInput::make( 'lastname' )
-                    ->maxLength( 50 )
-                    ->required(),
+                DatePicker::make( 'start_date' ),
 
-                TextInput::make( 'zipcode' )
-                    ->maxLength( 12 )
-                    ->required(),
+                DatePicker::make( 'end_date' ),
 
-                TextInput::make( 'email' )
-                    ->maxLength( 320 )
-                    ->email()
+                TextInput::make( 'is_active' )
                     ->required(),
 
                 AdminFieldsHelper::getAdminFields(
@@ -63,17 +56,7 @@ class ClientResource extends Resource
                         ->preload()
                         ->required(),
                     auth()->user()->shop_id
-                ),
-
-                TextInput::make( 'phone' )
-                    ->tel()
-                    ->maxLength( 22 ),
-
-                DatePicker::make( 'birthdate' )
-                    ->before( Carbon::now() ),
-
-                Toggle::make( 'newsletter' )
-                    ->default( false ),
+                )
             ] );
     }
 
@@ -81,20 +64,19 @@ class ClientResource extends Resource
     {
         return $table
             ->columns( [
-                TextColumn::make( 'firstname' ),
+                TextColumn::make( 'points' ),
 
-                TextColumn::make( 'lastname' ),
+                TextColumn::make( 'start_date' )
+                    ->date(),
 
-                TextColumn::make( 'zipcode' ),
+                TextColumn::make( 'end_date' )
+                    ->date(),
 
-                TextColumn::make( 'email' )
+                TextColumn::make( 'is_active' ),
+
+                TextColumn::make( 'shop.name' )
                     ->searchable()
                     ->sortable(),
-
-                TextColumn::make( 'phone' ),
-
-                TextColumn::make( 'birthdate' )
-                    ->date(),
             ] )
             ->filters( [
                 TrashedFilter::make(),
@@ -117,9 +99,9 @@ class ClientResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListClients::route( '/' ),
-            'create' => Pages\CreateClient::route( '/create' ),
-            'edit'   => Pages\EditClient::route( '/{record}/edit' ),
+            'index'  => Pages\ListLoyaltyOffers::route( '/' ),
+            'create' => Pages\CreateLoyaltyOffer::route( '/create' ),
+            'edit'   => Pages\EditLoyaltyOffer::route( '/{record}/edit' ),
         ];
     }
 
@@ -131,8 +113,24 @@ class ClientResource extends Resource
             ] );
     }
 
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with( ['shop'] );
+    }
+
     public static function getGloballySearchableAttributes(): array
     {
-        return ['email'];
+        return ['shop.name'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        $details = [];
+
+        if ($record->shop) {
+            $details['Shop'] = $record->shop->name;
+        }
+
+        return $details;
     }
 }

@@ -20,4 +20,8 @@ class Shop extends Model
     {
         return $this->hasMany( Employee::class );
     }
+
+    public function loyaltyOffers(): HasMany {
+        return $this->hasMany( LoyaltyOffer::class );
+    }
 }

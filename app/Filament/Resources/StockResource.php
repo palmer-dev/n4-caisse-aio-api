@@ -5,10 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StockResource\Pages;
 use App\Filament\Resources\StockResource\RelationManagers\MovementsRelationManager;
 use App\Models\Stock;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Grouping\Group;
@@ -29,13 +29,11 @@ class StockResource extends Resource
     {
         return $form
             ->schema( [
-                Select::make( 'sku_id' )
-                    ->relationship( 'sku', 'sku' ),
-
                 TextInput::make( 'quantity' )
                     ->required()
                     ->integer()
-            ] );
+            ] )
+            ->columns( 1 );
     }
 
     public static function table(Table $table): Table
@@ -55,7 +53,7 @@ class StockResource extends Resource
                 TrashedFilter::make(),
             ] )
             ->actions( [
-                // EditAction::make(),
+                EditAction::make(),
             ] );
     }
 
@@ -63,7 +61,6 @@ class StockResource extends Resource
     {
         return [
             'index'  => Pages\ListStocks::route( '/' ),
-            'create' => Pages\CreateStock::route( '/create' ),
             'edit'   => Pages\EditStock::route( '/{record}/edit' ),
         ];
     }

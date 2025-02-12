@@ -15,12 +15,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 #[ObservedBy(ProductObserver::class)]
 #[ScopedBy(ByShop::class)]
 class Product extends Model
 {
-    use HasUuids, HasFactory, SoftDeletes;
+    use HasUuids, HasFactory, SoftDeletes, HasRelationships;
 
     protected $fillable = [
         'category_id',
@@ -74,5 +76,10 @@ class Product extends Model
     public function sku(): HasOne
     {
         return $this->hasOne( Sku::class );
+    }
+
+    public function stock(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations( $this->sku(), (new Sku())->stock() );
     }
 }

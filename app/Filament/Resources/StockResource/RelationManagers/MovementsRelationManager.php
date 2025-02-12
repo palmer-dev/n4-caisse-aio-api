@@ -24,6 +24,8 @@ class MovementsRelationManager extends RelationManager
 
                 Forms\Components\Select::make( 'movement_type' )
                     ->options( MovementTypeEnum::class )
+                    ->default( MovementTypeEnum::INPUT )
+                    ->native(false)
                     ->required(),
 
                 Forms\Components\TextInput::make( 'quantity' )
@@ -44,8 +46,8 @@ class MovementsRelationManager extends RelationManager
                     ->date()
             ] )
             ->recordClasses( fn(StockMovements $record) => match ($record->movement_type) {
-                MovementTypeEnum::INPUT => 'bg-opacity-10 hover:bg-opacity-20 bg-green-600 hover:bg-green-600 dark:bg-green-300 hover:dark:bg-green-300',
-                MovementTypeEnum::OUTPUT => 'bg-opacity-10 hover:bg-opacity-20 bg-red-600 hover:bg-red-600 dark:bg-red-300 hover:dark:bg-red-300',
+                MovementTypeEnum::INPUT => 'bg-opacity-10 dark:bg-opacity-15 hover:bg-opacity-20 dark:hover:bg-opacity-25 bg-green-600 hover:bg-green-600 dark:bg-green-400 hover:dark:bg-green-400',
+                MovementTypeEnum::OUTPUT => 'bg-opacity-10 dark:bg-opacity-15 hover:bg-opacity-20 dark:hover:bg-opacity-25 bg-red-600 hover:bg-red-600 dark:bg-red-400 hover:dark:bg-red-400',
                 default => null,
             } )
             ->filters( [

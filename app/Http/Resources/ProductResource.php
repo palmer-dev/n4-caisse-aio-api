@@ -26,11 +26,11 @@ class ProductResource extends JsonResource
 
             'category' => new CategoryResource( $this->whenLoaded( 'category' ) ),
             'vatRate'  => new VatRateResource( $this->whenLoaded( 'vatRate' ) ),
-            'shop'     => new VatRateResource( $this->whenLoaded( 'shop' ) ),
+            'shop'     => new ShopResource( $this->whenLoaded( 'shop' ) ),
 
-            'stock'              => new VatRateResource( $this->whenLoaded( 'stock' ) ),
-            'sku'                => new VatRateResource( $this->whenLoaded( 'sku' ) ),
-            'product_attributes' => new VatRateResource( $this->whenLoaded( 'productAttributes' ) ),
+            'stock'              => new StockResource( $this->whenLoaded( 'stock' ) ),
+            'sku'                => new SkuResource( $this->whenLoaded( 'sku' ) ),
+            'product_attributes' => new ProductAttributeResource( $this->whenLoaded( 'productAttributes' ) ),
         ];
     }
 }

@@ -43,4 +43,9 @@ class StockMovements extends Model
     {
         return $this->hasOneDeepFromRelations( $this->sku(), (new Sku())->stock() );
     }
+
+    public function product(): HasOneDeep
+    {
+        return $this->hasOneDeepFromRelations( $this->sku(), (new Sku())->product() );
+    }
 }

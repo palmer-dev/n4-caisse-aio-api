@@ -162,6 +162,19 @@ enum PermissionsEnum: string
     case DELETE_LOYALTY_OFFERS       = "delete-loyalty-offers";
     case FORCE_DELETE_LOYALTY_OFFERS = "force-delete-loyalty-offers";
 
+    // LOYALTY OFFERS PERMISSIONS
+    #[ManagerPermission]
+    #[EmployeePermission]
+    case VIEW_SALES         = "view-sales";
+    #[ManagerPermission]
+    #[EmployeePermission]
+    case CREATE_SALES       = "create-sales";
+    #[ManagerPermission]
+    case EDIT_SALES         = "edit-sales";
+    #[ManagerPermission]
+    case DELETE_SALES       = "delete-sales";
+    case FORCE_DELETE_SALES = "force-delete-sales";
+
     public static function features(): array
     {
         $reflection = new \ReflectionEnum( self::class );

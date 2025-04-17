@@ -9,16 +9,16 @@ use Illuminate\Support\Carbon;
 
 class StockFactory extends Factory
 {
-	protected $model = Stock::class;
+    protected $model = Stock::class;
 
-	public function definition(): array
-	{
-		return [
-			'quantity'   => $this->faker->randomNumber(),
-			'created_at' => Carbon::now(),
-			'updated_at' => Carbon::now(),
+    public function definition(): array
+    {
+        return [
+            'quantity'   => $this->faker->randomNumber( 2 ),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
 
-			'sku_id' => Sku::factory(),
-		];
-	}
+            'sku_id' => Sku::factory(),
+        ];
+    }
 }

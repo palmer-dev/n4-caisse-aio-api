@@ -8,6 +8,7 @@ use App\Models\LoyaltyOffer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -42,12 +43,14 @@ class LoyaltyOfferResource extends Resource
                     ->required()
                     ->integer(),
 
-                DatePicker::make( 'start_date' ),
+                DatePicker::make( 'start_date' )
+                    ->native(false),
 
-                DatePicker::make( 'end_date' ),
+                DatePicker::make( 'end_date' )
+                    ->native(false),
 
-                TextInput::make( 'is_active' )
-                    ->required(),
+                Toggle::make( 'is_active' )
+                    ->inline(false),
 
                 AdminFieldsHelper::getAdminFields(
                     Select::make( 'shop_id' )

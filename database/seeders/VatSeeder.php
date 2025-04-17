@@ -13,9 +13,25 @@ class VatSeeder extends Seeder
     public function run(): void
     {
         //
-        VatRate::factory()->create( ["value" => 5, "description" => "Boissons"] );
-        VatRate::factory()->create( ["value" => 10, "description" => "10%"] );
-        VatRate::factory()->create( ["value" => 15, "description" => "15%"] );
-        VatRate::factory()->create( ["value" => 20, "description" => "TVA Standards"] );
+        VatRate::factory()->create( [
+            "name"        => "5% - Boissons",
+            "value"       => 5,
+            "description" => "Boissons"
+        ] );
+        VatRate::factory()->create( [
+            "name"        => "10%",
+            "value"       => 10,
+            "description" => "10%"
+        ] );
+        VatRate::factory()->create( [
+            "name"        => "15%",
+            "value"       => 15,
+            "description" => "15%"
+        ] );
+        VatRate::factory()->create( [
+            "name"        => "20% - Standard VAT",
+            "value"       => 20,
+            "description" => "Standard VAT"
+        ] );
     }
 }

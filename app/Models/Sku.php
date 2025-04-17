@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use App\Observers\SkuObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -23,6 +24,10 @@ class Sku extends Model
         'sku',
         'currency_code',
         'unit_amount',
+    ];
+
+    protected $casts = [
+        "unit_amount" => MoneyCast::class,
     ];
 
     public function productAttributeSku(): BelongsTo
@@ -47,6 +52,6 @@ class Sku extends Model
 
     public function stockMovements(): HasMany
     {
-        return $this->hasMany( StockMovements::make() );
+        return $this->hasMany( StockMovements::class );
     }
 }

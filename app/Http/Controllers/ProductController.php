@@ -15,7 +15,7 @@ class ProductController extends Controller
     {
         $this->authorize( 'viewAny', Product::class );
 
-        return ProductResource::collection( Product::all() );
+        return ProductResource::collection( Product::with( ["sku"] )->get() );
     }
 
     public function store(ProductRequest $request)

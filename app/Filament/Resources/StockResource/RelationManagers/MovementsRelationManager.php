@@ -25,7 +25,7 @@ class MovementsRelationManager extends RelationManager
                 Forms\Components\Select::make( 'movement_type' )
                     ->options( MovementTypeEnum::class )
                     ->default( MovementTypeEnum::INPUT )
-                    ->native(false)
+                    ->native( false )
                     ->required(),
 
                 Forms\Components\TextInput::make( 'quantity' )
@@ -42,6 +42,8 @@ class MovementsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make( 'quantity' ),
                 Tables\Columns\TextColumn::make( 'movement_type' )
                     ->badge(),
+                Tables\Columns\TextColumn::make( 'description' )
+                    ->limit( 200 ),
                 Tables\Columns\TextColumn::make( 'created_at' )
                     ->date()
             ] )

@@ -9,19 +9,19 @@ use Illuminate\Support\Carbon;
 
 class SkuFactory extends Factory
 {
-	protected $model = Sku::class;
+    protected $model = Sku::class;
 
-	public function definition(): array
-	{
-		return [
-			'sku'           => $this->faker->word(),
-			'slug'          => $this->faker->slug(),
-			'currency_code' => $this->faker->word(),
-			'unit_amount'   => $this->faker->randomFloat(),
-			'created_at'    => Carbon::now(),
-			'updated_at'    => Carbon::now(),
+    public function definition(): array
+    {
+        return [
+            'sku'           => $this->faker->word(),
+            'currency_code' => "EUR",
+            'barcode'       => $this->faker->ean13(),
+            'unit_amount'   => $this->faker->randomFloat( 2, min: 1, max: 100 ),
+            'created_at'    => Carbon::now(),
+            'updated_at'    => Carbon::now(),
 
-			'product_id' => Product::factory(),
-		];
-	}
+            'product_id' => Product::factory(),
+        ];
+    }
 }

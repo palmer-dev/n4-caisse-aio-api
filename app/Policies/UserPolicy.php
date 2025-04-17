@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Enums\PermissionsEnum;
 use App\Models\User;
-use App\Models\VatRate;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -16,7 +15,7 @@ class UserPolicy
         return $user->can( PermissionsEnum::VIEW_USERS );
     }
 
-    public function view(User $user, VatRate $vatRate): bool
+    public function view(User $user, User $concernedUser): bool
     {
         return $user->can( PermissionsEnum::VIEW_USERS );
     }
@@ -26,22 +25,22 @@ class UserPolicy
         return $user->can( PermissionsEnum::CREATE_USERS );
     }
 
-    public function update(User $user, VatRate $vatRate): bool
+    public function update(User $user, User $concernedUser): bool
     {
         return $user->can( PermissionsEnum::EDIT_USERS );
     }
 
-    public function delete(User $user, VatRate $vatRate): bool
+    public function delete(User $user, User $concernedUser): bool
     {
         return $user->can( PermissionsEnum::DELETE_USERS );
     }
 
-    public function restore(User $user, VatRate $vatRate): bool
+    public function restore(User $user, User $concernedUser): bool
     {
         return $user->can( PermissionsEnum::DELETE_USERS );
     }
 
-    public function forceDelete(User $user, VatRate $vatRate): bool
+    public function forceDelete(User $user, User $concernedUser): bool
     {
         return $user->can( PermissionsEnum::FORCE_DELETE_USERS );
     }

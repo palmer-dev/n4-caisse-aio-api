@@ -60,12 +60,12 @@ class Product extends Model
 
     public function getMinPriceAttribute(): string
     {
-        return $this->type === ProductTypeEnum::VARIABLE ? $this->skus->min( 'unit_amount' ) : $this->sku->unit_amount;
+        return ($this->type === ProductTypeEnum::VARIABLE ? $this->skus->min( 'unit_amount' ) : $this->sku->unit_amount) ?? 0;
     }
 
     public function getMaxPriceAttribute(): string
     {
-        return $this->type === ProductTypeEnum::VARIABLE ? $this->skus->max( 'unit_amount' ) : $this->sku->unit_amount;
+        return ($this->type === ProductTypeEnum::VARIABLE ? $this->skus->max( 'unit_amount' ) : $this->sku->unit_amount) ?? 0;
     }
 
     public function getSkusAttribute(): Collection

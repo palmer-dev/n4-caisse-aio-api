@@ -28,4 +28,9 @@ class Employee extends Model
     {
         return $this->belongsTo( Shop::class );
     }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->lastname . " " . $this->firstname;
+    }
 }

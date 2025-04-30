@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\AddressTypeEnum;
 use App\Filament\Resources\ShopResource\Pages;
 use App\Filament\Resources\ShopResource\RelationManagers\EmployeesRelationManager;
 use App\Models\Shop;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -43,7 +45,27 @@ class ShopResource extends Resource
         return $form
             ->schema( [
                 TextInput::make( 'name' )
-                    ->required()
+                    ->required(),
+
+                Fieldset::make( __( "Primary Address" ) )
+                    ->relationship( "primaryAddress" )
+                    ->schema( [
+                        TextInput::make( 'street' )
+                            ->autocomplete( "street" )
+                            ->required(),
+                        TextInput::make( 'city' )
+                            ->autocomplete( "city" )
+                            ->required(),
+                        TextInput::make( 'state' )
+                            ->autocomplete( "state" ),
+                        TextInput::make( 'postal_code' )
+                            ->autocomplete( "postal_code" )
+                            ->required(),
+                        TextInput::make( 'country' )
+                            ->autocomplete( "country" )
+                            ->required(),
+                        Hidden::make( "type" )->default( AddressTypeEnum::PRIMARY ),
+                    ] )
             ] );
     }
 

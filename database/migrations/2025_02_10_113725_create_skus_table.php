@@ -20,7 +20,9 @@ return new class extends Migration {
                 ->constrained( 'products' )
                 ->cascadeOnDelete();
             $table->string( 'sku' );
-            $table->decimal( 'unit_amount' );
+            $table->string( 'barcode' );
+            $table->string( 'currency_code' )->default( "EUR" );
+            $table->bigInteger( 'unit_amount' );
             $table->timestamps();
             $table->softDeletes();
         } );

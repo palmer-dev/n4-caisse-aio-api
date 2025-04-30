@@ -138,7 +138,7 @@ enum PermissionsEnum: string
     case DELETE_STOCK_MOVEMENTS       = "delete-stocks-movements";
     case FORCE_DELETE_STOCK_MOVEMENTS = "force-delete-stocks-movements";
 
-    // STOCK MOVEMENT PERMISSIONS
+    // CLIENTS PERMISSIONS
     #[ManagerPermission]
     #[EmployeePermission]
     case VIEW_CLIENTS         = "view-clients";
@@ -149,6 +149,31 @@ enum PermissionsEnum: string
     #[ManagerPermission]
     case DELETE_CLIENTS       = "delete-clients";
     case FORCE_DELETE_CLIENTS = "force-delete-clients";
+
+    // LOYALTY OFFERS PERMISSIONS
+    #[ManagerPermission]
+    #[EmployeePermission]
+    case VIEW_LOYALTY_OFFERS         = "view-loyalty-offers";
+    #[ManagerPermission]
+    case CREATE_LOYALTY_OFFERS       = "create-loyalty-offers";
+    #[ManagerPermission]
+    case EDIT_LOYALTY_OFFERS         = "edit-loyalty-offers";
+    #[ManagerPermission]
+    case DELETE_LOYALTY_OFFERS       = "delete-loyalty-offers";
+    case FORCE_DELETE_LOYALTY_OFFERS = "force-delete-loyalty-offers";
+
+    // LOYALTY OFFERS PERMISSIONS
+    #[ManagerPermission]
+    #[EmployeePermission]
+    case VIEW_SALES         = "view-sales";
+    #[ManagerPermission]
+    #[EmployeePermission]
+    case CREATE_SALES       = "create-sales";
+    #[ManagerPermission]
+    case EDIT_SALES         = "edit-sales";
+    #[ManagerPermission]
+    case DELETE_SALES       = "delete-sales";
+    case FORCE_DELETE_SALES = "force-delete-sales";
 
     public static function features(): array
     {

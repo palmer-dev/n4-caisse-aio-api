@@ -3,6 +3,14 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Widgets\LatestSalesWidget;
+use App\Filament\Widgets\LowStockWidget;
+use App\Filament\Widgets\PaymentBreakdownWidget;
+use App\Filament\Widgets\PerishableAlertWidget;
+use App\Filament\Widgets\SalesChart;
+use App\Filament\Widgets\ShopInfoWidget;
+use App\Filament\Widgets\TodaySalesWidget;
+use App\Filament\Widgets\TopProductsWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -12,7 +20,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -37,10 +44,14 @@ class AdminPanelProvider extends PanelProvider
             ->pages( [
                 Pages\Dashboard::class,
             ] )
-            ->discoverWidgets( in: app_path( 'Filament/Widgets' ), for: 'App\\Filament\\Widgets' )
             ->widgets( [
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                ShopInfoWidget::class,
+                PerishableAlertWidget::class,
+                TodaySalesWidget::class,
+                SalesChart::class,
+                LowStockWidget::class,
+                TopProductsWidget::class,
+                LatestSalesWidget::class,
             ] )
             ->middleware( [
                 EncryptCookies::class,

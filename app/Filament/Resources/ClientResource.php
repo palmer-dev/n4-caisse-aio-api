@@ -58,6 +58,7 @@ class ClientResource extends Resource
 
                 AdminFieldsHelper::getAdminFields(
                     Select::make( 'shop_id' )
+                        ->relationship( 'shop', 'name' )
                         ->searchable()
                         ->preload()
                         ->required(),

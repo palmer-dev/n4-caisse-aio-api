@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Client;
 use App\Models\Shop;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,9 @@ class ShopSeeder extends Seeder
         $this->command->getOutput()->progressStart( 10 );
 
         for ($i = 0; $i < 10; $i++) {
-            Shop::factory()->create();
+            $shop = Shop::factory()->create();
+
+            $shop->clients()->createMany( Client::factory()->count( rand( 1, 10 ) )->make()->toArray() );
 
             $this->command->getOutput()->progressAdvance();
         }

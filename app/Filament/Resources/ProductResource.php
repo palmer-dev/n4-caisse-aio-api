@@ -122,12 +122,17 @@ class ProductResource extends Resource
                                         ->relationship( 'sku' )
                                         ->schema( [
                                                 TextInput::make( 'sku' )
-                                                    ->label( 'SKU Code' )
+                                                    ->label( __( 'SKU Code' ) )
+                                                    ->distinct()
+                                                    ->required(),
+
+                                                TextInput::make( 'barcode' )
+                                                    ->label( __( "Barcode" ) )
                                                     ->distinct()
                                                     ->required(),
 
                                                 TextInput::make( 'unit_amount' )
-                                                    ->label( 'Price' )
+                                                    ->label( __( 'Price' ) )
                                                     ->numeric()
                                                     ->required(),
                                             ]
@@ -137,7 +142,7 @@ class ProductResource extends Resource
                         ]
                     )
                     ->columnSpanFull()
-                    ->visible( fn($get) => ProductTypeEnum::from( $get( "type" ) ) === ProductTypeEnum::VARIABLE ),
+                    ->visible( fn($get) => $get( "type" ) && ProductTypeEnum::from( $get( "type" ) ) === ProductTypeEnum::VARIABLE ),
 
                 Group::make()
                     ->columnSpanFull()
@@ -146,16 +151,22 @@ class ProductResource extends Resource
                     ->relationship( 'sku' )
                     ->schema( [
                             TextInput::make( 'sku' )
-                                ->label( 'SKU Code' )
+                                ->label( __( 'SKU Code' ) )
+                                ->distinct()
+                                ->required(),
+
+                            TextInput::make( 'barcode' )
+                                ->label( __( "Barcode" ) )
+                                ->distinct()
                                 ->required(),
 
                             TextInput::make( 'unit_amount' )
-                                ->label( 'Price' )
+                                ->label( __( 'Price' ) )
                                 ->numeric()
                                 ->required(),
                         ]
                     )
-                    ->visible( fn($get) => ProductTypeEnum::from( $get( "type" ) ) !== ProductTypeEnum::VARIABLE ),
+                    ->visible( fn($get) => $get( "type" ) && ProductTypeEnum::from( $get( "type" ) ) !== ProductTypeEnum::VARIABLE ),
             ] );
     }
 

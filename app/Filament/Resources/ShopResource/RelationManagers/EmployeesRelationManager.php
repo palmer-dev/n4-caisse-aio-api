@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ShopResource\RelationManagers;
 
+use App\Helpers\UniqueEmployeeCodeHelper;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -22,6 +23,9 @@ class EmployeesRelationManager extends RelationManager
                 Forms\Components\TextInput::make( 'lastname' )
                     ->required()
                     ->maxLength( 255 ),
+                Forms\Components\TextInput::make( 'code' )
+                    ->default( fn(callable $get) => UniqueEmployeeCodeHelper::generate( $get( "shop" ) ?? auth()->user()->shop_id ) )
+                    ->disabledOn( "edit" ),
             ] );
     }
 

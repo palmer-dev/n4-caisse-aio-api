@@ -46,7 +46,8 @@ class Stock extends Model
             'sku_id',      // Clé étrangère de StockMovements
             'sku_id',      // Clé de relation sur Stock (clé étrangère sur Stock)
             'id'           // Clé primaire de Stock (référence à la clé primaire de Stock)
-        );
+        )
+            ->orderBy( "created_at", "desc" );
     }
 
     public function product(): HasOneDeep

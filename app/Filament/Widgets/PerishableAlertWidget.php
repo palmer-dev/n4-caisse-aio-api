@@ -9,6 +9,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class PerishableAlertWidget extends BaseWidget
 {
+    protected static ?string $heading = 'Alerte de péremption';
+
     protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table

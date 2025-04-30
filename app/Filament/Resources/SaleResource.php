@@ -80,7 +80,8 @@ class SaleResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make( 'employee.fullName' )
+                TextColumn::make( 'employee.lastname' )
+                    ->formatStateUsing( fn(Sale $record) => $record->employee->fullName )
                     ->placeholder( __( "Unknown" ) )
                     ->searchable()
                     ->sortable()

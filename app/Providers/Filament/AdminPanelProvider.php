@@ -75,6 +75,8 @@ class AdminPanelProvider extends PanelProvider
                 'Boutique'       => NavigationGroup::make( fn() => __( 'nav.boutique' ) ),
                 'Settings'       => NavigationGroup::make( fn() => __( 'nav.setting' ) ),
             ] )
-            ->viteTheme( 'resources/css/filament/admin/theme.css' );
+            ->viteTheme( 'resources/css/filament/admin/theme.css' )
+            ->spa()
+            ->unsavedChangesAlerts();
     }
 }

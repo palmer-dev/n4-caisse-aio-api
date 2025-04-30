@@ -14,7 +14,6 @@ class SalesChart extends ChartWidget
     public ?string $endDate = null;
 
     public ?string $filter = 'year';
-
     protected int|string|array $columnSpan = 'full';
 
     protected function getFilters(): ?array

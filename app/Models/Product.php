@@ -101,4 +101,15 @@ class Product extends Model
     {
         $query->where( 'type', ProductTypeEnum::PERISHABLE );
     }
+
+    protected function scopeLimitDateOver(Builder $query, $date): void
+    {
+        $query->whereHas( 'stock', function (Builder $query) use ($date) {
+            $query->whereHas( 'movements', function (Builder $query) use ($date) {
+                $query->whereHas( 'stockExpiration', function (Builder $query) use ($date) {
+                    $query->whereDate( 'expiration_date', '<=', $date );
+                } );
+            } );
+        } );
+    }
 }

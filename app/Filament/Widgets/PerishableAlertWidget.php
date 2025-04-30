@@ -9,14 +9,18 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class PerishableAlertWidget extends BaseWidget
 {
+    protected int|string|array $columnSpan = 'full';
+
     public function table(Table $table): Table
     {
         return $table
             ->query(
                 Product::perishable()
+                    ->limitDateOver( now() )
             )
             ->columns( [
                 TextColumn::make( 'name' )->label( 'Produit' ),
-            ] );
+            ] )
+            ->deferLoading();
     }
 }

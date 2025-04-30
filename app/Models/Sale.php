@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Enums\PaymentMethodEnum;
 use App\Models\Scopes\ByShop;
 use App\Observers\SaleUniqueNumber;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -26,13 +27,15 @@ class Sale extends Model
         'employee_id',
         'client_id',
         'discount',
+        'payment_method',
         'sub_total',
         'grand_total',
     ];
 
     protected $casts = [
-        "sub_total"   => MoneyCast::class,
-        "grand_total" => MoneyCast::class,
+        "payment_method" => PaymentMethodEnum::class,
+        "sub_total"      => MoneyCast::class,
+        "grand_total"    => MoneyCast::class,
     ];
 
     public function shop(): BelongsTo

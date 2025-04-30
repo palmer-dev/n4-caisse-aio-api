@@ -20,8 +20,6 @@ class LoyaltyOfferFactory extends Factory
 			'is_active'  => $this->faker->word(),
 			'created_at' => Carbon::now(),
 			'updated_at' => Carbon::now(),
-
-			'shop_id' => Shop::factory(),
 		];
 	}
 }

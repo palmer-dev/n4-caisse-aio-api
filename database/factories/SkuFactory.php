@@ -20,8 +20,6 @@ class SkuFactory extends Factory
             'unit_amount'   => $this->faker->randomFloat( 2, min: 1, max: 100 ),
             'created_at'    => Carbon::now(),
             'updated_at'    => Carbon::now(),
-
-            'product_id' => Product::factory(),
         ];
     }
 }

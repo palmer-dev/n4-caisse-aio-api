@@ -26,7 +26,7 @@ class TopProductsWidget extends BaseWidget
                     ->limit( 5 )
             )
             ->columns( [
-                TextColumn::make( 'sku.product_id' )->label( 'Produit' ),
+                TextColumn::make( 'sku.product.name' )->label( 'Produit' ),
                 TextColumn::make( 'total_sold' )->label( 'Quantité vendue' ),
             ] );
     }

@@ -15,6 +15,8 @@ class SalesChart extends ChartWidget
 
     public ?string $filter = 'year';
 
+    protected int|string|array $columnSpan = 'full';
+
     protected function getFilters(): ?array
     {
         return [
@@ -117,6 +119,6 @@ class SalesChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'line';
+        return 'bar';
     }
 }

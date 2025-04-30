@@ -19,8 +19,6 @@ class ProductAttributeFactory extends Factory
             'product_type' => $this->faker->randomElement( collect( ProductTypeEnum::cases() )->values()->first() ),
             'created_at'   => Carbon::now(),
             'updated_at'   => Carbon::now(),
-
-            'product_id' => Product::factory(),
         ];
     }
 }

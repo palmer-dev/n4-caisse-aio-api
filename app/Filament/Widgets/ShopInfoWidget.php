@@ -7,4 +7,5 @@ use Filament\Widgets\Widget;
 class ShopInfoWidget extends Widget
 {
     protected static string $view = 'filament.widgets.shop-info-widget';
+    protected int | string | array $columnSpan = 'full';
 }

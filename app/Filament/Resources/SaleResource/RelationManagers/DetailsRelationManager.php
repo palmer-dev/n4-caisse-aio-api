@@ -33,6 +33,8 @@ class DetailsRelationManager extends RelationManager
                     } )
                     ->required()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                    ->searchable()
+                    ->native(false)
                     ->live(),
 
                 Hidden::make( "unit_price" )

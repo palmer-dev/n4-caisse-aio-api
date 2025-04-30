@@ -17,8 +17,6 @@ class StockFactory extends Factory
             'quantity'   => $this->faker->randomNumber( 2 ),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'sku_id' => Sku::factory(),
         ];
     }
 }

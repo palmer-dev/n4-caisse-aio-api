@@ -7,6 +7,7 @@ use App\Models\Scopes\ByShop;
 use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -60,6 +61,9 @@ class Product extends Model
 
     public function getMinPriceAttribute(): string
     {
+        if (empty( $this->sku )) {
+            dd( $this );
+        }
         return ($this->type === ProductTypeEnum::VARIABLE ? $this->skus->min( 'unit_amount' ) : $this->sku->unit_amount) ?? 0;
     }
 
@@ -81,5 +85,20 @@ class Product extends Model
     public function stock(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations( $this->sku(), (new Sku())->stock() );
+    }
+
+    protected function scopeVariables(Builder $query): void
+    {
+        $query->where( 'type', ProductTypeEnum::VARIABLE );
+    }
+
+    protected function scopeSimple(Builder $query): void
+    {
+        $query->where( 'type', ProductTypeEnum::SIMPLE );
+    }
+
+    protected function scopePerishable(Builder $query): void
+    {
+        $query->where( 'type', ProductTypeEnum::PERISHABLE );
     }
 }

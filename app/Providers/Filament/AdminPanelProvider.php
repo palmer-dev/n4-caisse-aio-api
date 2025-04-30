@@ -3,6 +3,10 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Widgets\LatestSalesWidget;
+use App\Filament\Widgets\LowStockWidget;
+use App\Filament\Widgets\PaymentBreakdownWidget;
+use App\Filament\Widgets\PerishableAlertWidget;
 use App\Filament\Widgets\SalesChart;
 use App\Filament\Widgets\ShopInfoWidget;
 use App\Filament\Widgets\TodaySalesWidget;
@@ -42,12 +46,12 @@ class AdminPanelProvider extends PanelProvider
             ] )
             ->widgets( [
                 ShopInfoWidget::class,
-                SalesChart::class,
+                PerishableAlertWidget::class,
                 TodaySalesWidget::class,
-//                PaymentBreakdownWidget::class,
+                SalesChart::class,
+                LowStockWidget::class,
                 TopProductsWidget::class,
-//                LowStockWidget::class,
-//                LatestSalesWidget::class,
+                LatestSalesWidget::class,
             ] )
             ->middleware( [
                 EncryptCookies::class,

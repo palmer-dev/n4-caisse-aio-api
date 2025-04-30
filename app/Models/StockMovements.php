@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
@@ -47,5 +48,11 @@ class StockMovements extends Model
     public function product(): HasOneDeep
     {
         return $this->hasOneDeepFromRelations( $this->sku(), (new Sku())->product() );
+    }
+
+    public function stockExpiration(): HasMany
+    {
+        return $this->hasMany( StockExpiration::class, "stock_movements_id", "id" )
+            ->orderBy( "expiration_date" );
     }
 }

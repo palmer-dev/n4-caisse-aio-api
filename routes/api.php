@@ -11,16 +11,16 @@ use Illuminate\Support\Facades\Route;
 
 //Route::post( "/auth/login/credentials", [AuthController::class, "loginWithCredentials"] );
 
-Route::name("auth")->prefix("auth")->group(function () {
-    Route::post("/login/credentials", [AuthController::class, "loginWithCredentials"]);
-    Route::post("/login", [AuthController::class, "login"]);
-    Route::post("/logout", [AuthController::class, "logout"]);
+Route::name( "auth" )->prefix( "auth" )->group( function () {
+    Route::post( "/login/credentials", [AuthController::class, "loginWithCredentials"] )->name( "login.credentials" );
+    Route::post( "/login", [AuthController::class, "login"] )->name( "login.token" );
+    Route::post( "/logout", [AuthController::class, "logout"] )->name( "logout" );
 
-});
+} );
 
 Route::middleware( ["auth:sanctum"] )->group( function () {
 
-    Route::get("/auth/me", [AuthController::class, "me"]);
+    Route::get( "/auth/me", [AuthController::class, "me"] );
 
     Route::name( "employees." )->prefix( "employees" )->group( function () {
         Route::post( '/auth', [EmployeeController::class, "auth"] );
@@ -32,6 +32,8 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
 
     Route::resource( "products", ProductController::class )
         ->only( ["index", "show"] );
+
+    Route::get( "scan/{barcode}", [ProductController::class, "scan"] )->name( "scan" );
 
     Route::resource( "sales", SaleController::class )
         ->only( ["index", "show", "store"] );

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthCredentialsRequest;
 use App\Http\Requests\AuthRequest;
+use App\Http\Resources\ClientProfileResource;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -50,8 +51,9 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json( [
-            "data" => Auth::user()
-        ] );
+        $user = Auth::user()
+            ->load( ["clientShops", "clients.sales"] );
+
+        return new ClientProfileResource( $user );
     }
 }

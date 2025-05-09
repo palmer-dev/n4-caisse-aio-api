@@ -32,12 +32,12 @@ class SaleDetail extends Model
     public function shop(): HasOneThrough
     {
         return $this->hasOneThrough(
-            Shop::class,
-            Sale::class,
-            'shop_id',
-            'id',
-            'sale_id',
-            'id'
+            Shop::class,     // Le modèle final
+            Sale::class,     // Le modèle intermédiaire
+            'id',            // Clé sur Sale (intermédiaire) qui est référencée par sale_id dans SaleDetail
+            'id',            // Clé sur Shop (final) qui est référencée par shop_id dans Sale
+            'sale_id',       // Clé sur SaleDetail (courant) vers Sale
+            'shop_id'        // Clé sur Sale (intermédiaire) vers Shop
         );
     }
 

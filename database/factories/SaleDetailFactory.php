@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\SaleDetail;
+use App\Models\Shop;
 use App\Models\Sku;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -23,5 +24,24 @@ class SaleDetailFactory extends Factory
 
             'sku_id' => $sku->id,
         ];
+    }
+
+    public function forShop(Shop $shop): SaleDetailFactory
+    {
+        $product = Sku::whereHas( 'product', function ($query) use ($shop) {
+            $query->where( 'shop_id', $shop->id );
+        } )
+            ->inRandomOrder()->first();
+
+        if (!$product) {
+            // Log or skip
+            return $this;
+        }
+
+        return $this->state( function (array $attributes) use ($product) {
+            return [
+                'sku_id' => $product->id,
+            ];
+        } );
     }
 }

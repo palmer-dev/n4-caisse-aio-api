@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure( basePath: dirname( __DIR__ ) )
     ->withRouting(
@@ -17,11 +17,11 @@ return Application::configure( basePath: dirname( __DIR__ ) )
     } )
     ->withExceptions( function (Exceptions $exceptions) {
         //
-        $exceptions->renderable( function (NotFoundHttpException $e, $request) {
-            $fullClass = $e->getPrevious()->getModel();
-            $modelName = last(explode("\\", $fullClass));
+        $exceptions->renderable( function (ModelNotFoundException $e, $request) {
+            $fullClass = $e->getModel();
+            $modelName = last( explode( "\\", $fullClass ) );
 
-            $readableModelName = preg_replace('/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' ', $modelName);
+            $readableModelName = preg_replace( '/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/', ' ', $modelName );
 
             return response()->json( [
                 'message' => "$readableModelName not found."

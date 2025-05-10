@@ -24,7 +24,7 @@ class ComputeSaleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "skus"            => ["required", "array"],
+            "skus"            => ["array"],
             "skus.*.sku"      => ["required", "exists:skus,sku"],
             "skus.*.quantity" => ["required", "integer", "min:1"],
         ];

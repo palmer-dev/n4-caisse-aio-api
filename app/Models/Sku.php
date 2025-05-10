@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Models\Scopes\ByShop;
 use App\Observers\SkuObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy(SkuObserver::class)]
+#[ScopedBy(ByShop::class)]
 class Sku extends Model
 {
     use HasUuids, HasFactory, SoftDeletes;
@@ -53,5 +57,22 @@ class Sku extends Model
     public function stockMovements(): HasMany
     {
         return $this->hasMany( StockMovements::class );
+    }
+
+    public function shop(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Shop::class,
+            Product::class,
+            'id',
+            'id',
+            'product_id',
+            'shop_id'
+        );
+    }
+
+    public function getComputedNameAttribute(): string
+    {
+        return $this->product->name . ($this->productAttributeSku ? " - {$this->productAttributeSku->value}" : '');
     }
 }

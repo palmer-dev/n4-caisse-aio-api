@@ -5,6 +5,7 @@ use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\ShopsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SkuController;
 use Illuminate\Support\Facades\Route;
 
 //Route::post( "/auth/login", [AuthController::class, "login"] );
@@ -30,10 +31,14 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
         Route::post( '/', [ShopsController::class, "index"] );
     } );
 
+    Route::resource( "skus", SkuController::class )
+        ->only( ["index", "show"] );
+
     Route::resource( "products", ProductController::class )
         ->only( ["index", "show"] );
 
-    Route::get( "scan/{barcode}", [ProductController::class, "scan"] )->name( "scan" );
+
+    Route::get( "scan/{sku:barcode}", [ProductController::class, "scan"] )->name( "scan" );
 
     Route::resource( "sales", SaleController::class )
         ->only( ["index", "show", "store"] );

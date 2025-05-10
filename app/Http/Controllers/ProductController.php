@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\SkuResource;
 use App\Models\Product;
+use App\Models\Sku;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
@@ -48,5 +50,12 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->json();
+    }
+
+    public function scan(Sku $sku)
+    {
+        $this->authorize( 'viewAny', Product::class );
+
+        return new SkuResource( $sku );
     }
 }

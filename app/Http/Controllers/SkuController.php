@@ -29,7 +29,7 @@ class SkuController extends Controller
 	{
 		$this->authorize( 'view', $sku );
 
-		return new SkuResource( $sku );
+		return new SkuResource( $sku->load("product") );
 	}
 
 	public function update(SkuRequest $request, Sku $sku)

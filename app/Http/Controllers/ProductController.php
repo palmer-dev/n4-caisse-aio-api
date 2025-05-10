@@ -56,6 +56,8 @@ class ProductController extends Controller
     {
         $this->authorize( 'viewAny', Product::class );
 
+        $sku->load( ["product.vatRate"] );
+
         return new SkuResource( $sku );
     }
 }

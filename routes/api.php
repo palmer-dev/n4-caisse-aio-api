@@ -42,4 +42,6 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
 
     Route::resource( "sales", SaleController::class )
         ->only( ["index", "show", "store"] );
+
+    Route::post( "sales/compute", [SaleController::class, "compute"] )->name( "scan" );
 } );

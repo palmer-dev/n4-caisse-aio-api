@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ComputeSaleRequest;
 use App\Http\Requests\SaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
 use App\Models\Sku;
 use App\Services\ReceiptService;
 use App\Services\SaleTotalRefresher;
+use App\Services\SimulationService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SaleController extends Controller
@@ -15,7 +17,7 @@ class SaleController extends Controller
     use AuthorizesRequests;
 
 
-    public function __construct(protected SaleTotalRefresher $saleTotalRefresher, protected ReceiptService $receiptService)
+    public function __construct(protected SaleTotalRefresher $saleTotalRefresher, protected ReceiptService $receiptService, protected SimulationService $simulationService)
     {
     }
 
@@ -100,5 +102,16 @@ class SaleController extends Controller
         $file = $this->receiptService->getReceipt( $sale );
 
         return response()->file( $file );
+    }
+
+    public function compute(ComputeSaleRequest $request)
+    {
+        $this->authorize( 'create', Sale::class );
+
+        $result = $this->simulationService->compute( $request->validated( "skus" ) );
+
+        return response()->json( [
+            'data' => $result
+        ] );
     }
 }

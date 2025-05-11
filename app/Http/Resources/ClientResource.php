@@ -19,6 +19,7 @@ class ClientResource extends JsonResource
             'code'       => $this->code,
             'email'      => $this->email,
             'phone'      => $this->phone,
+            'newsletter' => $this->newsletter,
             'sales'      => SaleCollection::make( $this->whenLoaded( 'sales' ) ),
             'birthdate'  => $this->birthdate,
             'created_at' => $this->created_at,

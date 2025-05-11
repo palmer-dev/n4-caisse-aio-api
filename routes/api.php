@@ -45,7 +45,7 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
         ->only( ["index", "show", "store"] );
 
     Route::post( "sales/compute", [SaleController::class, "compute"] )->name( "sales.compute" );
-    Route::post( "sales/{sale}/send-receipt", [SaleController::class, "sendReceipt"] )->name( "sales.compute" );
+    Route::post( "sales/{sale}/send-receipt", [SaleController::class, "sendReceipt"] )->name( "sales.send-receipt" );
 
     // == Clients
     Route::post( "clients/search", [ClientController::class, "search"] )->name( "clients.fidelity" );

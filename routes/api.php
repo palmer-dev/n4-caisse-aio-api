@@ -48,7 +48,7 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
 
     // == Clients
     Route::post( "clients/search", [ClientController::class, "search"] )->name( "clients.fidelity" );
-    Route::post( "clients/{client:code}", [ClientController::class, "show"] )->name( "clients.show" );
+    Route::get( "clients/{client:code}", [ClientController::class, "show"] )->name( "clients.show" );
 
     Route::resource( "clients", ClientController::class )
         ->only( ["store", "update", "destroy"] );

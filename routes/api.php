@@ -45,6 +45,7 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
         ->only( ["index", "show", "store"] );
 
     Route::post( "sales/compute", [SaleController::class, "compute"] )->name( "sales.compute" );
+    Route::post( "sales/{sale}/send-receipt", [SaleController::class, "sendReceipt"] )->name( "sales.compute" );
 
     // == Clients
     Route::post( "clients/search", [ClientController::class, "search"] )->name( "clients.fidelity" );
@@ -52,4 +53,15 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
 
     Route::resource( "clients", ClientController::class )
         ->only( ["store", "update", "destroy"] );
+
+
+    // == Receipts
+    Route::prefix( 'receipts' )->name( 'api.receipts.' )->group( function () {
+        // Route pour afficher le ticket PDF (à adapter si nécessaire)
+        Route::get( '/{sale}', [SaleController::class, 'generateTicket'] )
+            ->name( 'ticket' );
+
+        // Route pour prévisualiser un reçu PDF
+        Route::get( '/{sale}/preview', [SaleController::class, 'previewReceipt'] )->name( 'preview' );
+    } );
 } );

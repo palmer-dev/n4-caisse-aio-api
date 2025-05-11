@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ComputeSaleRequest;
 use App\Http\Requests\SaleRequest;
 use App\Http\Resources\SaleResource;
+use App\Mail\SaleReceiptMail;
 use App\Models\Sale;
 use App\Models\Sku;
 use App\Services\ReceiptService;
@@ -12,6 +13,7 @@ use App\Services\SaleTotalRefresher;
 use App\Services\SimulationService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class SaleController extends Controller
 {
@@ -124,5 +126,16 @@ class SaleController extends Controller
         return response()->json( [
             'data' => $result
         ] );
+    }
+
+    public function sendReceipt(Sale $sale)
+    {
+        $this->authorize( 'view', $sale );
+
+        $file = $this->receiptService->getReceipt( $sale );
+
+        Mail::to( $sale->client->email )->send( new SaleReceiptMail( $sale, $file ) );
+
+        return response()->file( $file );
     }
 }

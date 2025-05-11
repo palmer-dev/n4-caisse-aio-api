@@ -87,6 +87,8 @@ class ClientResource extends Resource
     {
         return $table
             ->columns( [
+                TextColumn::make( 'code' ),
+
                 TextColumn::make( 'firstname' ),
 
                 TextColumn::make( 'lastname' ),

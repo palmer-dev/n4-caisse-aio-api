@@ -11,6 +11,7 @@ use App\Services\ReceiptService;
 use App\Services\SaleTotalRefresher;
 use App\Services\SimulationService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
@@ -32,36 +33,45 @@ class SaleController extends Controller
     {
         $this->authorize( 'create', Sale::class );
 
-        $sale = Sale::create( $request->validated() );
+        try {
+            return DB::transaction( function () use ($request) {
+                $sale = Sale::create( $request->validated() );
 
-        $detailsFromRequest = collect( $request->validated( 'skus' ) );
+                $detailsFromRequest = collect( $request->validated( 'skus' ) );
 
-        // Récupère les Skus existants depuis la base, indexés par code SKU
-        $skus = Sku::whereIn( 'sku', $detailsFromRequest->pluck( 'sku' ) )
-            ->get()
-            ->keyBy( 'sku' ); // Permet un accès direct via le code SKU
+                $skus = Sku::whereIn( 'sku', $detailsFromRequest->pluck( 'sku' ) )
+                    ->with( ['product', 'product.vatRate'] )
+                    ->get()
+                    ->keyBy( 'sku' );
 
-        $details = $detailsFromRequest->map( function ($detail) use ($skus) {
-            $sku = $skus->get( $detail['sku'] );
+                $details = $detailsFromRequest->map( function ($detail) use ($skus) {
+                    /**
+                     * @var $sku Sku
+                     */
+                    $sku = $skus->get( $detail['sku'] );
 
-            if (!$sku) {
-                throw new \Exception( "SKU non trouvé : {$detail['sku']}" );
-            }
+                    if (!$sku) {
+                        throw new \Exception( "SKU non trouvé : {$detail['sku']}" );
+                    }
 
-            return [
-                'sku_id'     => $sku->id,
-                'quantity'   => $detail['quantity'],
-                'vat'        => $sku->product->vatRate->rate,
-                'unit_price' => $sku->unit_price, // Take the price from the model, multiply by hundred to have the price in cents
-            ];
-        } );
+                    return [
+                        'sku_id'     => $sku->id,
+                        'quantity'   => $detail['quantity'],
+                        'vat'        => $sku->product->vatRate->value,
+                        'unit_price' => $sku->unit_amount,
+                    ];
+                } );
 
-        // Création en masse des SaleDetails
-        $sale->details()->createMany( $details->toArray() );
+                $sale->details()->createMany( $details->toArray() );
 
-        $this->saleTotalRefresher->refresh( $sale );
+                $this->saleTotalRefresher->refresh( $sale );
 
-        return new SaleResource( $sale );
+                return new SaleResource( $sale );
+            } );
+        } catch (\Throwable $e) {
+            report( $e ); // log ou sentry
+            return response()->json( ['message' => 'Erreur lors de la création de la vente.'], 500 );
+        }
     }
 
     public function show(Sale $sale)

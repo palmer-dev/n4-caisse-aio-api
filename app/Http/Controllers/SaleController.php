@@ -51,6 +51,7 @@ class SaleController extends Controller
             return [
                 'sku_id'     => $sku->id,
                 'quantity'   => $detail['quantity'],
+                'vat'        => $sku->product->vatRate->rate,
                 'unit_price' => $sku->unit_price, // Take the price from the model, multiply by hundred to have the price in cents
             ];
         } );

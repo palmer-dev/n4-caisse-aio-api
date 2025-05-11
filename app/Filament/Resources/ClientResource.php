@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClientResource\Pages;
 use App\Helpers\AdminFieldsHelper;
+use App\Helpers\UniqueClientCodeHelper;
 use App\Models\Client;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
@@ -74,6 +75,11 @@ class ClientResource extends Resource
 
                 Toggle::make( 'newsletter' )
                     ->default( false ),
+
+                TextInput::make( 'code' )
+                    ->required()
+                    ->default( fn(callable $get) => UniqueClientCodeHelper::generate( $get( "shop" ) ?? auth()->user()->shop_id ) )
+                    ->disabledOn( "edit" ),
             ] );
     }
 

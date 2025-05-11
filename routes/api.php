@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\ShopsController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SkuController;
@@ -44,4 +45,11 @@ Route::middleware( ["auth:sanctum"] )->group( function () {
         ->only( ["index", "show", "store"] );
 
     Route::post( "sales/compute", [SaleController::class, "compute"] )->name( "sales.compute" );
+
+    // == Clients
+    Route::post( "clients/search", [ClientController::class, "search"] )->name( "clients.fidelity" );
+    Route::post( "clients/{client:code}", [ClientController::class, "show"] )->name( "clients.show" );
+
+    Route::resource( "clients", ClientController::class )
+        ->only( ["store", "update", "destroy"] );
 } );

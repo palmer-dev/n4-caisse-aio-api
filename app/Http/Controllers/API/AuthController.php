@@ -36,10 +36,11 @@ class AuthController extends Controller
 
         if ($loggedIn) {
             $user = Auth::user();
+
             return response()->json( [
                 "data" => [
                     "token" => $user->createToken( "mobile_app_token" )->plainTextToken,
-                    "user"  => $user
+                    "user"  => new ClientProfileResource( $user )
                 ]
             ] );
         }

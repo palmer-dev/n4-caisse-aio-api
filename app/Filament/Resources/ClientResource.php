@@ -23,6 +23,7 @@ use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,6 +78,13 @@ class ClientResource extends Resource
                 Toggle::make( 'newsletter' )
                     ->default( false ),
 
+                Select::make( 'user_id' )
+                    ->relationship( 'user', 'firstname' )
+                    ->getOptionLabelUsing( fn($user) => $user->firstname . ' ' . $user->lastname )
+                    ->searchable()
+                    ->preload()
+                    ->visible( (bool)auth()->user()->isAdmin() ),
+
                 TextInput::make( 'code' )
                     ->required()
                     ->default( fn(callable $get) => UniqueClientCodeHelper::generate( $get( "shop" ) ?? auth()->user()->shop_id ) )
@@ -111,6 +119,8 @@ class ClientResource extends Resource
             ] )
             ->filters( [
                 TrashedFilter::make(),
+                SelectFilter::make( 'shop_id' )
+                    ->relationship( 'shop', 'name' )
             ] )
             ->actions( [
                 EditAction::make(),

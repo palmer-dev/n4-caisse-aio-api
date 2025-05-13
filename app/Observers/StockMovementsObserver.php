@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Enums\MovementTypeEnum;
+use App\Jobs\ProcessStockMovement;
 use App\Models\StockMovements;
 
 class StockMovementsObserver
@@ -18,6 +19,11 @@ class StockMovementsObserver
         if ($stockMovements->movement_type === MovementTypeEnum::OUTPUT)
             $stockMovements->stock->quantity -= $stockMovements->quantity;
 
+
         $stockMovements->stock->save();
+
+        // Only call the job if the movement is an output
+        if ($stockMovements->movement_type === MovementTypeEnum::OUTPUT)
+            ProcessStockMovement::dispatch( $stockMovements->stock );
     }
 }

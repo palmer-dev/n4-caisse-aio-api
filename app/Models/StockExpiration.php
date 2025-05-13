@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 class StockExpiration extends Model
 {
@@ -26,5 +27,10 @@ class StockExpiration extends Model
         return [
             'expiration_date' => 'date',
         ];
+    }
+
+    public function getDaysUntilExpiration(): int
+    {
+        return Carbon::parse( $this->expiration_date )->diffInDays( now(), true );
     }
 }

@@ -11,25 +11,50 @@
 
         body {
             margin: 0px;
-        }
-
-        body {
             font-family: Arial, sans-serif;
             font-size: 9px;
         }
 
         .ticket {
-            /*max-width: 300px;*/
+            margin: auto;
         }
 
         .centered {
-            margin: auto;
             text-align: center;
+            word-wrap: break-word;
+            white-space: normal;
         }
 
         .line {
             border-bottom: 1px dashed black;
             margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        p, h3 {
+            margin: 0;
+            word-wrap: break-word;
+            white-space: normal;
+            margin-bottom: 5px;
+        }
+
+        p.no-margin {
+            margin-bottom: 0;
+        }
+
+        .small {
+            font-size: 6px;
         }
     </style>
 </head>
@@ -37,26 +62,70 @@
 <div class="ticket">
     <h2 class="centered">{{ $store_name }}</h2>
     <p class="centered">{{ $address }}</p>
-    <p>Date: {{ $date }}</p>
+    <p class="centered">SIRET : {{ $siret }} | RCS : {{ $rcs }}</p>
+    <p>Date : {{ $date }} - Heure : {{ $time }}</p>
+    <p>Ticket n° : {{ $sale_no }}</p>
+
     <div class="line"></div>
-    <table width="100%">
+
+    <table>
         <thead>
         <tr>
-            <th width="70%"></th>
-            <th width="15%"></th>
-            <th width="15%"></th>
+            <th>Article</th>
+            <th>Qté</th>
+            <th class="right">Prix</th>
         </tr>
         </thead>
+        <tbody>
         @foreach($items as $item)
             <tr>
                 <td>{{ $item['name'] }}</td>
                 <td>x{{ $item['qty'] }}</td>
-                <td style="text-align: right">{{ number_format($item['price'], 2) }}€</td>
+                <td class="right">{{ $item['price'] }}</td>
             </tr>
         @endforeach
+        </tbody>
+    </table>
+
+    <div class="line"></div>
+
+    <table>
+        <tbody>
+        <tr>
+            <td>Total HT</td>
+            <td class="right">{{ $total_ht }}</td>
+        </tr>
+        @foreach($tax_breakdown as $taxRate => $taxAmount)
+            <tr>
+                <td>TVA ({{ $taxRate }}%)</td>
+                <td class="right">{{ $taxAmount }}</td>
+            </tr>
+        @endforeach
+        @if($has_discount)
+            <tr>
+                <td>Remise TTC appliquée</td>
+                <td class="right">-{{ $discount }}</td>
+            </tr>
+        @endif
+        <tr>
+            <th>Total TTC</th>
+            <th class="right">{{ $total }}</th>
+        </tr>
+        <tr>
+            <td>Mode de paiement</td>
+            <td class="right">{{ $payment_method }}</td>
+        </tr>
+        @if($tva_exempt)
+            <tr>
+                <td colspan="2">TVA non applicable – art. 293 B du CGI</td>
+            </tr>
+        @endif
+        </tbody>
     </table>
     <div class="line"></div>
-    <h3>Total: {{ number_format($total, 2) }}€</h3>
+    <p class="centered no-margin">Merci de votre visite !</p>
+    <br>
+    <p class="centered small no-margin">Powered by Eco-Caisse</p>
 </div>
 </body>
 </html>

@@ -20,7 +20,7 @@ class SaleTotalRefresher
 
         // Update sale totals
         $sale->sub_total   = $totals->computed_sub_total / 100;
-        $sale->grand_total = $totals->computed_grand_total / 100;
+        $sale->grand_total = ($totals->computed_grand_total / 100) - $sale->discount;
 
         $sale->save();
     }

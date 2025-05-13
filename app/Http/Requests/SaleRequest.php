@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PaymentMethodEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SaleRequest extends FormRequest
 {
@@ -10,6 +12,7 @@ class SaleRequest extends FormRequest
     {
         return [
             'employee_id'     => ['nullable', 'exists:employees,id'],
+            'payment_method'  => ['nullable', Rule::enum( PaymentMethodEnum::class )],
             'client_id'       => ['nullable', 'exists:clients,id'],
             'shop_id'         => ['required', 'exists:shops,id'],
             'discount'        => ['required', 'numeric', 'lte:100'],

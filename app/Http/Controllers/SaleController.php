@@ -130,8 +130,8 @@ class SaleController extends Controller
 
     public function previewReceipt(string $sale)
     {
-        $sale = Sale::withoutGlobalScope( ByShop::class )->find( $sale );
-        
+        $sale = Sale::withoutGlobalScope( ByShop::class )->findOrFail( $sale );
+
         $file = $this->receiptService->getReceipt( $sale );
 
         return response()->file( $file );

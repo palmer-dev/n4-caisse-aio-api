@@ -105,14 +105,14 @@ class SaleController extends Controller
     {
         $this->saleTotalRefresher->refresh( $sale );
 
-        $file = $this->receiptService->getReceipt( $sale , true);
+        $file = $this->receiptService->getReceipt( $sale );
 
         return response()->file( $file );
     }
 
     public function previewReceipt(Sale $sale)
     {
-        $file = $this->receiptService->getReceipt( $sale, true );
+        $file = $this->receiptService->getReceipt( $sale );
 
         return response()->file( $file );
     }

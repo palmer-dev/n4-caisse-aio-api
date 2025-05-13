@@ -29,6 +29,9 @@ class SalesRelationManager extends RelationManager
             ->recordTitleAttribute( 'sale_no' )
             ->columns( [
                 Tables\Columns\TextColumn::make( 'sale_no' ),
+                Tables\Columns\TextColumn::make( 'created_at' )
+                    ->dateTime()
+                    ->sortable(),
             ] )
             ->filters( [
                 //

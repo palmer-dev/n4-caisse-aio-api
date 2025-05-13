@@ -37,7 +37,7 @@ class AuthController extends Controller
         if ($loggedIn) {
             $user = Auth::user();
             $user->load( ["clientShops", "clients"] );
-
+            
             return response()->json( [
                 "data" => [
                     "token" => $user->createToken( "mobile_app_token" )->plainTextToken,
@@ -54,7 +54,7 @@ class AuthController extends Controller
     public function me()
     {
         $user = Auth::user()
-            ->load( ["clientShops", "clients.sales"] );
+            ->load( ["clientShops", "clients"] );
 
         return new ClientProfileResource( $user );
     }

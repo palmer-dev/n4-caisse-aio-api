@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\RolesEnum;
+use App\Models\Scopes\ByShop;
 use Database\Factories\UserFactory;
 use DateTimeInterface;
 use Filament\Models\Contracts\FilamentUser;
@@ -76,7 +77,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
      */
     public function clients(): HasMany
     {
-        return $this->hasMany( Client::class );
+        return $this->hasMany( Client::class )
+            ->withoutGlobalScope( ByShop::class );
     }
 
     public function clientShops(): HasManyThrough

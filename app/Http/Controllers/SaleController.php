@@ -34,7 +34,8 @@ class SaleController extends Controller
             ->when( auth()->user()->hasRole( RolesEnum::CLIENT ), function ($query) {
                 $query->withoutGlobalScope( ByShop::class )
                     ->whereHas( 'client', function ($query) {
-                        $query->where( 'user_id', auth()->id() );
+                        $query->withoutGlobalScope( ByShop::class )
+                            ->where( 'user_id', auth()->id() );
                     } );
             } )
             ->get();

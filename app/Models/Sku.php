@@ -117,4 +117,11 @@ class Sku extends Model
 
         return $value;
     }
+
+    public function getHasDiscountAttribute(): bool
+    {
+        return $promo = $this->discounts()
+                ->current()
+                ->first() !== null;
+    }
 }

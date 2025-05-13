@@ -17,8 +17,8 @@ class ClientProfileResource extends JsonResource
             'lastname'  => $this->lastname,
             'email'     => $this->email,
             'phone'     => $this->phone,
-            'shops'     => ShopCollection::make( $this->whenLoaded( 'clientShops' ) ),
-            'clients'   => ClientCollection::make( $this->whenLoaded( 'clients' ) ),
+            'shops'     => ClientShopResource::collection( $this->whenLoaded( 'clientShops' ) ),
+            'clients'   => ClientResource::collection( $this->whenLoaded( 'clients' ) ),
         ];
     }
 }

@@ -36,6 +36,7 @@ class AuthController extends Controller
 
         if ($loggedIn) {
             $user = Auth::user();
+            $user->load( ["clientShops", "clients"] );
 
             return response()->json( [
                 "data" => [

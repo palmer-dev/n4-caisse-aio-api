@@ -31,4 +31,9 @@ class Shop extends Model
     {
         return $this->hasMany( Client::class );
     }
+
+    public function sales(): HasMany
+    {
+        return $this->hasMany( Sale::class );
+    }
 }

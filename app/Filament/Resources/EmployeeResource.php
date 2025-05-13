@@ -30,7 +30,7 @@ class EmployeeResource extends Resource
     protected static ?string $model = Employee::class;
 
     protected static ?string $slug = 'employees';
-
+    protected static ?int $navigationSort = 6;
     protected static ?string $navigationGroup = "Boutique";
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';

@@ -31,10 +31,10 @@ class SaleResource extends Resource
     protected static ?string $model = Sale::class;
 
     protected static ?string $slug = 'sales';
-
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationGroup = "Boutique";
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
 
     public static function form(Form $form): Form
     {

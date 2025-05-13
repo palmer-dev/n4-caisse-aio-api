@@ -10,17 +10,19 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-intl": "*",
         "barryvdh/laravel-dompdf": "^3.1",
         "codeat3/blade-carbon-icons": "^2.34",
+        "codeat3/blade-line-awesome-icons": "^1.5",
         "codeat3/blade-pepicons": "^1.6",
         "codewithdennis/filament-select-tree": "^3.1",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "owenvoke/blade-fontawesome": "^2.9",
         "spatie/laravel-permission": "^6.10",
-        "staudenmeir/eloquent-has-many-deep": "^1.7",
-        "ext-intl": "*"
+        "staudenmeir/eloquent-has-many-deep": "^1.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

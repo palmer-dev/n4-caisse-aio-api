@@ -17,6 +17,7 @@ class SaleResource extends JsonResource
             'discount'    => $this->discount,
             'sub_total'   => $this->sub_total,
             'grand_total' => $this->grand_total,
+            'nb_articles' => $this->getNbArticlesAttribute(),
 
             $this->mergeWhen( !$this->relationLoaded( 'employee' ) && auth()->user()->hasRole( RolesEnum::ADMIN ), [
                 'employee_id' => $this->employee_id,

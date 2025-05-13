@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClientResource\Pages;
+use App\Filament\Resources\ClientResource\RelationManagers\SalesRelationManager;
 use App\Helpers\AdminFieldsHelper;
 use App\Helpers\UniqueClientCodeHelper;
 use App\Models\Client;
@@ -93,6 +94,10 @@ class ClientResource extends Resource
 
                 TextColumn::make( 'lastname' ),
 
+                TextColumn::make( 'sales_count' )
+                    ->counts( 'sales' )
+                    ->default( 0 ),
+
                 TextColumn::make( 'zipcode' ),
 
                 TextColumn::make( 'email' )
@@ -142,5 +147,14 @@ class ClientResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return ['email'];
+    }
+
+    public static function getRelations(): array
+    {
+        return
+            [
+                ...parent::getRelations(),
+                SalesRelationManager::class
+            ];
     }
 }

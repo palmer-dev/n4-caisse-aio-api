@@ -25,7 +25,8 @@ class SkuResource extends JsonResource
 
             'product_id' => $this->product_id,
 
-            'product' => new ProductResource( $this->whenLoaded( 'product' ) ),
+            'product'   => new ProductResource( $this->whenLoaded( 'product' ) ),
+            'discounts' => DiscountResource::collection( $this->discounts()->current()->get() ),
         ];
     }
 }

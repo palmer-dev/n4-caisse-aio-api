@@ -57,7 +57,7 @@ class SaleResource extends Resource
 
                 TextInput::make( 'discount' )
                     ->default( 0 )
-                    ->suffix( "%" )
+                    ->suffix( "€" )
                     ->required()
                     ->numeric(),
 

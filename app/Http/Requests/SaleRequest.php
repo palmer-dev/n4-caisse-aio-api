@@ -14,7 +14,7 @@ class SaleRequest extends FormRequest
             'employee_id'     => ['nullable', 'exists:employees,id'],
             'payment_method'  => ['nullable', Rule::enum( PaymentMethodEnum::class )],
             'client_id'       => ['nullable', 'exists:clients,id'],
-            'shop_id'         => ['required', 'exists:shops,id'],
+            'shop_id'         => ['nullable', 'exists:shops,id'],
             'discount'        => ['required', 'numeric', 'lte:100'],
             'skus'            => ["required", "array"],
             'skus.*.sku'      => ['required', 'exists:skus,sku'],

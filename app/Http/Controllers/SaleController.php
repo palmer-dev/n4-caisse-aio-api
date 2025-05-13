@@ -37,7 +37,11 @@ class SaleController extends Controller
 
         try {
             return DB::transaction( function () use ($request) {
-                $sale = Sale::create( $request->validated() );
+                $sale = Sale::create( [
+                        'shop_id' => auth()->user()->shop_id,
+                        ...$request->validated()
+                    ]
+                );
 
                 $detailsFromRequest = collect( $request->validated( 'skus' ) );
 

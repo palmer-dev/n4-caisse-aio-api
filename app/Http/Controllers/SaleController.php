@@ -140,6 +140,6 @@ class SaleController extends Controller
 
         Mail::to( $sale->client->email )->send( new SaleReceiptMail( $sale, $file ) );
 
-        return response()->file( $file );
+        return response()->noContent();
     }
 }

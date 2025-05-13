@@ -52,6 +52,6 @@ class SalesRelationManager extends RelationManager
             ->recordUrl(
                 fn($record) => SaleResource::getUrl( 'view', ['record' => $record] )
             )
-            ->defaultSort( 'create_at', 'desc' );
+            ->defaultSort( 'created_at', 'desc' );
     }
 }

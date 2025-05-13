@@ -85,7 +85,7 @@ class Sku extends Model
 
     public function getFinalPriceAttribute()
     {
-        $price = $this->unit_amount * (1 + $this->product->vatRate->value / 100);
+        $price = $this->getUnitAmountWithTaxAttribute();
         $promo = $this->discounts()
             ->current()
             ->first();
@@ -99,9 +99,14 @@ class Sku extends Model
         return $price;
     }
 
+    public function getUnitAmountWithTaxAttribute(): float
+    {
+        return $this->unit_amount * (1 + $this->product->vatRate->value / 100);
+    }
+
     public function getDiscountValueAttribute()
     {
-        $price = $this->unit_amount * (1 + $this->product->vatRate->value / 100);
+        $price = $this->getUnitAmountWithTaxAttribute();
 
         $value = 0;
 
@@ -120,7 +125,7 @@ class Sku extends Model
 
     public function getHasDiscountAttribute(): bool
     {
-        return $promo = $this->discounts()
+        return $this->discounts()
                 ->current()
                 ->first() !== null;
     }

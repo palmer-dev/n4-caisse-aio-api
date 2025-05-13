@@ -63,11 +63,13 @@ class SaleResource extends Resource
 
                 TextInput::make( 'sub_total' )
                     ->required()
-                    ->integer(),
+                    ->numeric()
+                    ->suffix( "€" ),
 
                 TextInput::make( 'grand_total' )
                     ->required()
-                    ->integer()
+                    ->numeric()
+                    ->suffix( "€" )
             ] );
     }
 

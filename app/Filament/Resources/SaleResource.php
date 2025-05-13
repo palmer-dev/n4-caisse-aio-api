@@ -32,6 +32,8 @@ class SaleResource extends Resource
 
     protected static ?string $slug = 'sales';
 
+    protected static ?string $navigationGroup = "Boutique";
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

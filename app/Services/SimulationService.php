@@ -42,7 +42,7 @@ class SimulationService
 
             $grandTotal += ($sku->getFinalPriceAttribute() * $quantity);
 
-            $discount += $sku->getDiscountValueAttribute();
+            $discount += $sku->getDiscountValueAttribute() * $quantity;
         } );
 
         return [

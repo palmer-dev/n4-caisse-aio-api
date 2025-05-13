@@ -141,6 +141,40 @@ class ProductResource extends Resource
                                                     ->label( __( 'Price' ) )
                                                     ->numeric()
                                                     ->required(),
+
+                                                Section::make( 'Promotions' )
+                                                    ->schema( [
+                                                        Repeater::make( 'discounts' )
+                                                            ->relationship( 'discounts' )
+                                                            ->label( 'Promotions' )
+                                                            ->columns( 2 )
+                                                            ->schema( [
+                                                                TextInput::make( 'name' )
+                                                                    ->required(),
+
+                                                                Toggle::make( 'is_active' )
+                                                                    ->default( true )
+                                                                    ->inline( false ),
+
+                                                                Select::make( 'type' )
+                                                                    ->options( DiscountType::class )
+                                                                    ->required(),
+
+                                                                TextInput::make( 'value' )
+                                                                    ->numeric()
+                                                                    ->required(),
+
+                                                                DatePicker::make( 'start_date' )
+                                                                    ->required(),
+
+                                                                DatePicker::make( 'end_date' )
+                                                                    ->required(),
+
+                                                                Hidden::make( 'shop_id' )
+                                                                    ->default( fn(Get $get) => $get( '../../../../../../../shop_id' ) )
+                                                            ] )
+                                                            ->columnSpanFull()
+                                                    ] )
                                             ]
                                         )
                                 ] )
@@ -171,7 +205,7 @@ class ProductResource extends Resource
                                 ->numeric()
                                 ->required(),
 
-                            Section::make( 'Discounts' )
+                            Section::make( 'Promotions' )
                                 ->schema( [
                                     Repeater::make( 'discounts' )
                                         ->relationship( 'discounts' )

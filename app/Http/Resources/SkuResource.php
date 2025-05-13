@@ -18,6 +18,7 @@ class SkuResource extends JsonResource
             'currency_code'        => $this->currency_code,
             'unit_amount'          => $this->unit_amount,
             'unit_amount_with_tax' => $this->unit_amount * (1 + $this->product->vatRate->value / 100),
+            'final_price'          => $this->final_price,
             'created_at'           => $this->created_at,
             'updated_at'           => $this->updated_at,
 

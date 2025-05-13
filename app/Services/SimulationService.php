@@ -17,10 +17,12 @@ class SimulationService
             ->get();
 
         $subtotal     = 0;
+        $grandTotal   = 0;
+        $discount     = 0;
         $taxTotal     = 0;
         $taxBreakdown = [];
 
-        $skuModels->each( function (Sku $sku) use (&$subtotal, &$taxTotal, &$taxBreakdown, $quantities) {
+        $skuModels->each( function (Sku $sku) use (&$discount, &$grandTotal, &$subtotal, &$taxTotal, &$taxBreakdown, $quantities) {
             $quantity  = $quantities[$sku->sku] ?? 1;
             $unitPrice = $sku->unit_amount;
             $vatRate   = $sku->product->vatRate->value ?? 0;
@@ -37,12 +39,15 @@ class SimulationService
             }
 
             $taxBreakdown[$vatRate] += $lineTax;
-        } );
 
-        $grandTotal = $subtotal + $taxTotal;
+            $grandTotal += ($sku->getFinalPriceAttribute() * $quantity);
+
+            $discount += $sku->getDiscountValueAttribute();
+        } );
 
         return [
             'subtotal'      => round( $subtotal, 2 ),
+            'discount'      => round( $discount, 2 ),
             'tax'           => round( $taxTotal, 2 ),
             'grand_total'   => round( $grandTotal, 2 ),
             'tax_breakdown' => collect( $taxBreakdown )

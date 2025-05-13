@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RolesEnum;
 use App\Http\Requests\ComputeSaleRequest;
 use App\Http\Requests\SaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Mail\SaleReceiptMail;
 use App\Models\Sale;
+use App\Models\Scopes\ByShop;
 use App\Models\Sku;
 use App\Services\ReceiptService;
 use App\Services\SaleTotalRefresher;
@@ -28,7 +30,14 @@ class SaleController extends Controller
     {
         $this->authorize( 'viewAny', Sale::class );
 
-        return SaleResource::collection( Sale::all() );
+        $sales = Sale::with( ["shop"] )
+            ->when( auth()->user()->hasRole( RolesEnum::CLIENT ), function ($query) {
+                $query->withoutGlobalScope( ByShop::class )
+                    ->where( 'client_id', auth()->user()->id );
+            } )
+            ->get();
+
+        return SaleResource::collection( $sales );
     }
 
     public function store(SaleRequest $request)
@@ -83,6 +92,8 @@ class SaleController extends Controller
     public function show(Sale $sale)
     {
         $this->authorize( 'view', $sale );
+
+        $sale->load( ["shop"] );
 
         return new SaleResource( $sale );
     }

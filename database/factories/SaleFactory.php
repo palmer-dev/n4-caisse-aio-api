@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\PaymentMethodEnum;
 use App\Models\Sale;
 use App\Models\Shop;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -15,11 +16,12 @@ class SaleFactory extends Factory
     {
         $shop = Shop::inRandomOrder()->first();
         return [
-            'discount'    => $this->faker->randomFloat( max: 15 ),
-            'sub_total'   => 0,
-            'grand_total' => 0,
-            'created_at'  => $this->faker->dateTimeBetween( "-12 month" ),
-            'updated_at'  => Carbon::now(),
+            'discount'       => $this->faker->randomFloat( max: 15 ),
+            'sub_total'      => 0,
+            'grand_total'    => 0,
+            'created_at'     => $this->faker->dateTimeBetween( "-12 month" ),
+            'payment_method' => PaymentMethodEnum::CASH,
+            'updated_at'     => Carbon::now(),
 
             'employee_id' => $shop->employees()->inRandomOrder()->first()?->id,
             'client_id'   => $shop->clients()->inRandomOrder()->first()?->id,

@@ -31,6 +31,7 @@ class LoyaltyOfferResource extends Resource
     protected static ?string $model = LoyaltyOffer::class;
 
     protected static ?string $slug = 'loyalty-offers';
+    protected static ?int $navigationSort = 5;
     protected static ?string $navigationGroup = "Boutique";
 
     protected static ?string $navigationIcon = 'heroicon-o-gift-top';

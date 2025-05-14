@@ -31,8 +31,10 @@ class SaleResource extends Resource
     protected static ?string $model = Sale::class;
 
     protected static ?string $slug = 'sales';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = "Boutique";
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-bar';
 
     public static function form(Form $form): Form
     {
@@ -57,17 +59,19 @@ class SaleResource extends Resource
 
                 TextInput::make( 'discount' )
                     ->default( 0 )
-                    ->suffix( "%" )
+                    ->suffix( "€" )
                     ->required()
                     ->numeric(),
 
                 TextInput::make( 'sub_total' )
                     ->required()
-                    ->integer(),
+                    ->numeric()
+                    ->suffix( "€" ),
 
                 TextInput::make( 'grand_total' )
                     ->required()
-                    ->integer()
+                    ->numeric()
+                    ->suffix( "€" )
             ] );
     }
 
@@ -111,6 +115,10 @@ class SaleResource extends Resource
                 TextColumn::make( 'grand_total' )
                     ->money( "EUR" )
                     ->toggleable(),
+
+                TextColumn::make( 'created_at' )
+                    ->dateTime()
+                    ->toggleable(),
             ] )
             ->filters( [
                 TrashedFilter::make(),
@@ -137,7 +145,8 @@ class SaleResource extends Resource
                     RestoreBulkAction::make(),
                     ForceDeleteBulkAction::make(),
                 ] ),
-            ] );
+            ] )
+            ->defaultSort( 'created_at', 'desc' );
     }
 
     public static function getPages(): array
@@ -145,6 +154,7 @@ class SaleResource extends Resource
         return [
             'index'  => Pages\ListSales::route( '/' ),
             'create' => Pages\CreateSale::route( '/create' ),
+            'view'   => Pages\ViewSale::route( '/{record}' ),
             'edit'   => Pages\EditSale::route( '/{record}/edit' ),
         ];
     }

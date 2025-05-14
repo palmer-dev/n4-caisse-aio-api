@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'shop' => [
+        'low_quantity_alert' => env('SHOP_LOW_QUANTITY_ALERT', 10),
+        'perishable_product_alert_days' => env('SHOP_PERISHABLE_PRODUCT_ALERT_DAYS', 10),
+    ]
 ];

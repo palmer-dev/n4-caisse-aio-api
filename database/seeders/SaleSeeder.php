@@ -27,7 +27,9 @@ class SaleSeeder extends Seeder
                 ] );
 
                 $sale->details()->createMany(
-                    SaleDetail::factory()->count( rand( 1, 5 ) )->make()->toArray()
+                    SaleDetail::factory()->count( rand( 1, 5 ) )
+                        ->forShop( $shop )
+                        ->make()->toArray()
                 );
 
                 $refresher = new SaleTotalRefresher();

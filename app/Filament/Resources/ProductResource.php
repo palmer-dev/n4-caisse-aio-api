@@ -2,16 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\DiscountType;
 use App\Enums\ProductTypeEnum;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Helpers\AdminFieldsHelper;
 use App\Models\Product;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -36,7 +42,7 @@ class ProductResource extends Resource
     protected static ?string $model = Product::class;
 
     protected static ?string $slug = 'products';
-
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationGroup = "Boutique";
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
@@ -135,6 +141,40 @@ class ProductResource extends Resource
                                                     ->label( __( 'Price' ) )
                                                     ->numeric()
                                                     ->required(),
+
+                                                Section::make( 'Promotions' )
+                                                    ->schema( [
+                                                        Repeater::make( 'discounts' )
+                                                            ->relationship( 'discounts' )
+                                                            ->label( 'Promotions' )
+                                                            ->columns( 2 )
+                                                            ->schema( [
+                                                                TextInput::make( 'name' )
+                                                                    ->required(),
+
+                                                                Toggle::make( 'is_active' )
+                                                                    ->default( true )
+                                                                    ->inline( false ),
+
+                                                                Select::make( 'type' )
+                                                                    ->options( DiscountType::class )
+                                                                    ->required(),
+
+                                                                TextInput::make( 'value' )
+                                                                    ->numeric()
+                                                                    ->required(),
+
+                                                                DatePicker::make( 'start_date' )
+                                                                    ->required(),
+
+                                                                DatePicker::make( 'end_date' )
+                                                                    ->required(),
+
+                                                                Hidden::make( 'shop_id' )
+                                                                    ->default( fn(Get $get) => $get( '../../../../../../../shop_id' ) )
+                                                            ] )
+                                                            ->columnSpanFull()
+                                                    ] )
                                             ]
                                         )
                                 ] )
@@ -147,7 +187,7 @@ class ProductResource extends Resource
                 Group::make()
                     ->columnSpanFull()
                     ->columns( 2 )
-                    ->label( "SKU Détails" )// Permet de créer un SKU directement
+                    ->label( "SKU Détails" )
                     ->relationship( 'sku' )
                     ->schema( [
                             TextInput::make( 'sku' )
@@ -164,6 +204,40 @@ class ProductResource extends Resource
                                 ->label( __( 'Price' ) )
                                 ->numeric()
                                 ->required(),
+
+                            Section::make( 'Promotions' )
+                                ->schema( [
+                                    Repeater::make( 'discounts' )
+                                        ->relationship( 'discounts' )
+                                        ->label( 'Promotions' )
+                                        ->columns( 2 )
+                                        ->schema( [
+                                            TextInput::make( 'name' )
+                                                ->required(),
+
+                                            Toggle::make( 'is_active' )
+                                                ->default( true )
+                                                ->inline( false ),
+
+                                            Select::make( 'type' )
+                                                ->options( DiscountType::class )
+                                                ->required(),
+
+                                            TextInput::make( 'value' )
+                                                ->numeric()
+                                                ->required(),
+
+                                            DatePicker::make( 'start_date' )
+                                                ->required(),
+
+                                            DatePicker::make( 'end_date' )
+                                                ->required(),
+
+                                            Hidden::make( 'shop_id' )
+                                                ->default( fn(Get $get) => $get( '../../../shop_id' ) )
+                                        ] )
+                                        ->columnSpanFull()
+                                ] )
                         ]
                     )
                     ->visible( fn($get) => $get( "type" ) && ProductTypeEnum::from( $get( "type" ) ) !== ProductTypeEnum::VARIABLE ),

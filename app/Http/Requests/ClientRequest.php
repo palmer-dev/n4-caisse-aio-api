@@ -13,8 +13,8 @@ class ClientRequest extends FormRequest
             'lastname'   => ['required', 'max:50'],
             'zipcode'    => ['required', 'max:12'],
             'email'      => ['required', 'email', 'max:320'],
-            'phone'      => ['required', "max:22"],
-            'newsletter' => ['required', "boolean"],
+            'phone'      => ['required', 'max:22'],
+            'newsletter' => ['required', 'boolean'],
             'birthdate'  => ['required', 'date'],
         ];
     }

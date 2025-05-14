@@ -21,6 +21,7 @@ class StockResource extends Resource
     protected static ?string $model = Stock::class;
 
     protected static ?string $slug = 'stocks';
+    protected static ?int $navigationSort = 3;
     protected static ?string $navigationGroup = 'Boutique';
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';

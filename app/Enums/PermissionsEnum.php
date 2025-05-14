@@ -24,6 +24,7 @@ enum PermissionsEnum: string
     // PRODUCTS PERMISSIONS
     #[ManagerPermission]
     #[EmployeePermission]
+    #[ClientPermission]
     case VIEW_PRODUCTS         = "view-products";
     #[ManagerPermission]
     case CREATE_PRODUCTS       = "create-products";
@@ -46,6 +47,7 @@ enum PermissionsEnum: string
     case FORCE_DELETE_CATEGORIES = "force-delete-categories";
 
     // SHOPS PERMISSIONS
+
     case VIEW_SHOPS         = "view-shops";
     case CREATE_SHOPS       = "create-shops";
     case EDIT_SHOPS         = "edit-shops";
@@ -153,6 +155,7 @@ enum PermissionsEnum: string
     // LOYALTY OFFERS PERMISSIONS
     #[ManagerPermission]
     #[EmployeePermission]
+    #[ClientPermission]
     case VIEW_LOYALTY_OFFERS         = "view-loyalty-offers";
     #[ManagerPermission]
     case CREATE_LOYALTY_OFFERS       = "create-loyalty-offers";
@@ -165,6 +168,7 @@ enum PermissionsEnum: string
     // LOYALTY OFFERS PERMISSIONS
     #[ManagerPermission]
     #[EmployeePermission]
+    #[ClientPermission]
     case VIEW_SALES         = "view-sales";
     #[ManagerPermission]
     #[EmployeePermission]

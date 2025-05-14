@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Scopes\ByShop;
+use App\Observers\ClientObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ScopedBy(ByShop::class)]
+#[ObservedBy(ClientObserver::class)]
 class Client extends Model
 {
     use HasUuids, HasFactory, SoftDeletes;
@@ -24,6 +27,7 @@ class Client extends Model
         'zipcode',
         'email',
         'phone',
+        'code',
         'newsletter',
         'birthdate',
     ];

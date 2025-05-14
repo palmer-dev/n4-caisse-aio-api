@@ -58,7 +58,7 @@ class EditProfile extends BaseEditProfile
         return [
             ...parent::getFormActions(),
             Action::make( 'generate_token' )
-                ->label( 'Générer un Token' )
+                ->label( 'Générer une clé' )
                 ->modalContent()
                 ->form( [
                     TextInput::make( 'name' )
@@ -115,7 +115,20 @@ class EditProfile extends BaseEditProfile
                 ->action( function ($data, EditProfile $livewire) {
                     $user = User::find( data_get( $livewire, "data.id" ) );
 
-                    $user->saveToken( $data["name"], $data["token"], $data["abilities"] );
+                    $defaultAbilities = [
+                        PermissionsEnum::VIEW_CLIENTS->value,
+                        PermissionsEnum::VIEW_PRODUCTS,
+                        PermissionsEnum::VIEW_CATEGORIES,
+                        PermissionsEnum::VIEW_EMPLOYEES,
+                        PermissionsEnum::VIEW_SALES,
+                        PermissionsEnum::VIEW_STOCKS,
+                        PermissionsEnum::VIEW_STOCK_MOVEMENTS,
+                        PermissionsEnum::VIEW_SKUS,
+                        PermissionsEnum::VIEW_ATTRIBUTE_SKUS,
+                        PermissionsEnum::CREATE_SALES,
+                    ];
+
+                    $user->saveToken( $data["name"], $data["token"], $data["abilities"] ?? $defaultAbilities );
 
                     Notification::make()
                         ->success()

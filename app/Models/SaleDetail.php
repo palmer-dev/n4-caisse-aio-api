@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
-use App\Enums\ProductTypeEnum;
 use App\Observers\SaleObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -27,17 +26,18 @@ class SaleDetail extends Model
 
     protected $casts = [
         "unit_price" => MoneyCast::class,
+        "vat"        => "float",
     ];
 
     public function shop(): HasOneThrough
     {
         return $this->hasOneThrough(
-            Shop::class,
-            Sale::class,
-            'shop_id',
-            'id',
-            'sale_id',
-            'id'
+            Shop::class,     // Le modèle final
+            Sale::class,     // Le modèle intermédiaire
+            'id',            // Clé sur Sale (intermédiaire) qui est référencée par sale_id dans SaleDetail
+            'id',            // Clé sur Shop (final) qui est référencée par shop_id dans Sale
+            'sale_id',       // Clé sur SaleDetail (courant) vers Sale
+            'shop_id'        // Clé sur Sale (intermédiaire) vers Shop
         );
     }
 
@@ -53,11 +53,7 @@ class SaleDetail extends Model
 
     public function getDenominationAttribute(): string
     {
-        if ($this->sku->product->type === ProductTypeEnum::VARIABLE) {
-            return $this->sku->product->name . " - " . $this->sku->productAttributeSku->value;
-
-        }
-        return $this->sku->product->name;
+        return $this->sku->getComputedNameAttribute();
     }
 
     public function getSubTotalAttribute(): float
@@ -72,6 +68,6 @@ class SaleDetail extends Model
 
     public function getVatAmountAttribute(): float
     {
-        return $this->unit_price * $this->quantity * $this->vat;
+        return $this->unit_price * ($this->vat / 100) * $this->quantity;
     }
 }

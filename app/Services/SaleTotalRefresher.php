@@ -51,7 +51,7 @@ class SaleTotalRefresher
             CASE
                 WHEN discounts.type = "' . DiscountType::PERCENT->value . '" THEN (skus.unit_amount * (1 + vat / 100) * (discounts.value / 10000)) * quantity
                 WHEN discounts.type = "' . DiscountType::AMOUNT->value . '" THEN discounts.value * quantity
-                ELSE skus.unit_amount * (1 + vat / 100) * quantity
+                ELSE 0
             END
         ) AS computed_discount
     ' )

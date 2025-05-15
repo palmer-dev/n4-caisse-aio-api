@@ -61,9 +61,6 @@ class Product extends Model
 
     public function getMinPriceAttribute(): string
     {
-        if (empty( $this->sku )) {
-            dd( $this );
-        }
         return ($this->type === ProductTypeEnum::VARIABLE ? $this->skus->min( 'unit_amount' ) : $this->sku->unit_amount) ?? 0;
     }
 

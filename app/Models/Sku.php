@@ -28,6 +28,7 @@ class Sku extends Model
         'product_attribute_sku_id',
         'product_id',
         'sku',
+        'barcode',
         'currency_code',
         'unit_amount',
     ];
